@@ -1,0 +1,119 @@
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #ffffff; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.signup-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.signup-box {
+  background-color: #ffffff;
+  padding: 40px 35px;
+  border-radius: 15px;
+  box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 100%;
+  max-width: 450px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    transform: scale(1.02);
+  }
+}
+h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #000000; 
+  margin-bottom: 10px;
+}
+
+p {
+  font-size: 14px;
+  color: #555; 
+  margin-bottom: 20px;
+}
+.form-group {
+  text-align: left;
+  margin-bottom: 20px;
+
+  label {
+    font-weight: 600;
+    color: #000000;
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #007bff; 
+    border-radius: 10px;
+    font-size: 16px;
+    background: #f0f8ff; 
+    color: #000000;
+    transition: all 0.3s ease-in-out;
+
+    &::placeholder {
+      color: rgba(0, 0, 0, 0.5); 
+    }
+  }
+  span {
+    background: rgba(231, 76, 60, 0.3);
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: white;
+    font-size: 12px;
+    margin-top: 5px;
+    display: block;
+    font-weight: bold;
+  }
+}
+.btn-signup {
+  background: #007bff;
+  color: white;
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  text-transform: uppercase;
+  font-weight: bold;
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    background: #0056b3;
+    transform: scale(1.05);
+    box-shadow: 0px 4px 15px rgba(0, 123, 255, 0.6);
+  }
+}
+.links {
+  margin-top: 15px;
+
+  .login-link {
+    display: block;
+    color: #007bff;
+    font-weight: 600;
+    text-decoration: none;
+    margin-top: 10px;
+
+    &:hover {
+      text-decoration: underline;
+      color: #0056b3;
+    }
+  }
+}

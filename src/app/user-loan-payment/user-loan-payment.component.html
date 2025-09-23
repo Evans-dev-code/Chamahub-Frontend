@@ -1,0 +1,43 @@
+<div class="container">
+  <div class="loan-payment-container">
+    <h2>User Loan Payment</h2>
+
+    <div *ngIf="isLoading" class="loading-overlay">
+      <div class="spinner"></div>
+      <p>Loading approved loans...</p>
+    </div>
+
+    <div *ngIf="!isLoading && approvedLoans.length === 0" class="loading-message">
+      No approved loans found.
+    </div>
+
+    <div *ngFor="let loan of approvedLoans" class="loan-card">
+      <h3>{{ loan.fullName }}</h3>
+      <p><strong>Loan Type:</strong> {{ loan.loanType }}</p>
+      <p><strong>Original Amount:</strong> ${{ loan.amount | number:'1.2-2' }}</p>
+      <p><strong>Remaining Balance:</strong> ${{ loan.remainingBalance | number:'1.2-2' }}</p>
+      <p><strong>Duration:</strong> {{ loan.duration }} months</p>
+      <p><strong>Status:</strong> {{ loan.status }}</p>
+
+      <div class="payment-input">
+        <label for="payment-{{loan.id}}">Enter Payment Amount:</label>
+        <input
+          type="number"
+          id="payment-{{loan.id}}"
+          [(ngModel)]="paymentAmount[loan.id]"
+          min="1"
+          placeholder="e.g. 1000"
+        />
+        <button (click)="makePayment(loan.id)">Pay</button>
+      </div>
+
+      <p *ngIf="paymentStatus[loan.id]" [style.color]="paymentStatus[loan.id].startsWith('✅') ? 'green' : 'red'">
+        {{ paymentStatus[loan.id] }}
+      </p>
+
+      <hr />
+    </div>
+
+    <button (click)="goBack()" class="back-btn">⬅ Back to Dashboard</button>
+  </div>
+</div>

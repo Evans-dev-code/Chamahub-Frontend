@@ -1,0 +1,134 @@
+.loan-container {
+  font-family: Arial, sans-serif;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.loan-container::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background-image: url(https://static.vecteezy.com/system/resources/thumbnails/030/469/051/small/rear-view-of-businessman-looking-at-digital-interface-on-abstract-city-background-ai-generated-photo.jpg);
+  background-size: cover;
+  background-position: center;
+  opacity: 0.25;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.loan-info {
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+h2, h3 {
+  color: #296ee4;
+}
+
+h2 {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+p {
+  text-align: left;
+  font-size: 16px;
+  color: #000000;
+  margin-bottom: 10px;
+}
+
+.loan-type-info {
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+
+  label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #327ee9;
+    margin-bottom: 5px;
+    display: inline-block;
+  }
+
+  input, select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #333;
+    background-color: #fff;
+    transition: border-color 0.3s ease;
+
+    &:focus {
+      border-color: #007bff;
+      outline: none;
+    }
+  }
+
+  small.error {
+    color: #e74c3c;
+    font-size: 12px;
+    display: block;
+    margin-top: 5px;
+  }
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+}
+
+.back-btn {
+  text-align: center;
+  margin-top: 20px;
+
+  button {
+    background-color: #6c757d;
+    color: white;
+    padding: 8px 2px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: #5a6268;
+    }
+  }
+}
+

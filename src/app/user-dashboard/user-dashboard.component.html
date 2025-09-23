@@ -1,0 +1,53 @@
+<div class="dashboard-container">
+  <nav class="sidebar">
+    <h2 class="logo">ChamaHub💰</h2>
+    <ul class="nav-links">
+      <li><a routerLink="/user-dashboard">Home</a></li>
+      <li><a href="#" (click)="openModal($event)">Loan Calculator</a></li>
+      <li><a routerLink="/loan-application">Apply for Loan</a></li>
+      <li><a routerLink="/view-loan-status">View Loan Status</a></li>
+      <li><a routerLink="/user-loan-payment">Loan Payment</a></li>
+    </ul>
+    <button class="logout-btn" (click)="logout()">Logout</button>
+  </nav>
+
+  <div class="main-content">
+    <section class="hero">
+      <h1>Welcome to ChamaHub💰</h1>
+      <p>Your trusted partner for financial solutions. Explore our loan options and take control of your future.</p>
+    </section>
+
+    <section class="financial-education">
+      <h2>Financial Insights</h2>
+      <div class="educational-content">
+        <!-- ... existing content ... -->
+      </div>
+    </section>
+
+    <!-- ✅ Loan Calculator Modal -->
+    <div class="modal-overlay" [class.show]="isModalOpen" (click)="closeModal()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <h2>Loan Calculator</h2>
+        <div class="calculator-box">
+          <label>Loan Amount ($):</label>
+          <!-- ✅ Explicitly type these as numbers in TS -->
+          <input type="number" [(ngModel)]="loanAmount" placeholder="Enter amount" />
+
+          <label>Interest Rate (%):</label>
+          <input type="number" [(ngModel)]="interestRate" placeholder="Enter rate" />
+
+          <label>Loan Term (Years):</label>
+          <input type="number" [(ngModel)]="loanTerm" placeholder="Enter term" />
+
+          <button (click)="calculateLoan()">Calculate</button>
+
+          <div *ngIf="monthlyPayment !== null">
+            <h3>Estimated Monthly Payment: ${{ monthlyPayment | number:'1.2-2' }}</h3>
+          </div>
+
+          <button class="close-btn" (click)="closeModal()">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

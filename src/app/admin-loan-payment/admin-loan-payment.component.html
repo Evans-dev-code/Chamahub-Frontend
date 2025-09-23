@@ -1,0 +1,56 @@
+<h3>Admin Loan Payment</h3>
+
+<div *ngIf="paymentError" style="color: red;">{{ paymentError }}</div>
+<div *ngIf="paymentSuccess" style="color: green;">✅ Admin payment successful!</div>
+
+<div *ngIf="approvedLoans.length === 0 && !paymentError">
+  <p>No approved loans available in this chama.</p>
+</div>
+
+<div *ngIf="approvedLoans.length > 0">
+  <label for="loan">Select Loan:</label>
+  <select [(ngModel)]="selectedLoan" name="loan" id="loan" (change)="onLoanSelected()">
+    <option [ngValue]="null">-- Select Loan --</option>
+    <option *ngFor="let loan of approvedLoans" [ngValue]="loan">
+      {{ loan.fullName }} - {{ loan.amount | currency }}
+    </option>
+  </select>
+
+  <!-- ✅ Payment History -->
+  <div *ngIf="selectedLoan">
+    <h4 class="mt-3">Payment History</h4>
+
+    <div *ngIf="loadingHistory">Loading history...</div>
+
+    <table *ngIf="paymentHistory.length > 0" class="table-auto w-full border mt-2">
+      <thead class="bg-gray-200">
+        <tr>
+          <th class="px-4 py-2">Date</th>
+          <th class="px-4 py-2">Amount Paid</th>
+          <th class="px-4 py-2">By Admin?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of paymentHistory">
+          <td class="border px-4 py-2">{{ p.paymentDate | date:'short' }}</td>
+          <td class="border px-4 py-2">{{ p.amountPaid | currency }}</td>
+          <td class="border px-4 py-2">{{ p.paidByAdmin ? 'Yes' : 'No' }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="paymentHistory.length === 0 && !loadingHistory">
+      <p>No payments have been made yet.</p>
+    </div>
+  </div>
+
+  <br />
+
+  <!-- Payment Input -->
+  <label for="amount">Amount to Pay:</label>
+  <input type="number" [(ngModel)]="amountPaid" id="amount" />
+
+  <br /><br />
+
+  <button (click)="makeAdminPayment()">Pay Manually</button>
+</div>

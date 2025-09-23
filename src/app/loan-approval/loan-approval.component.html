@@ -1,0 +1,44 @@
+<div class="loan-approval-container">
+  <h2>Loan Applications</h2>
+
+  <!-- ✅ Chama selector -->
+  <div class="chama-selector" *ngIf="chamas.length > 0">
+    <label for="chamaSelect"><strong>Select Chama:</strong></label>
+    <select
+      id="chamaSelect"
+      class="chama-dropdown"
+      [(ngModel)]="selectedChamaId"
+      (ngModelChange)="loadApplications()"
+    >
+      <option *ngFor="let chama of chamas" [value]="chama.id">
+        {{ chama.name }}
+      </option>
+    </select>
+  </div>
+
+  <!-- ✅ Loading / Error / Empty states -->
+  <div *ngIf="loading" class="loading">Loading applications...</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
+  <div *ngIf="!loading && applications.length === 0" class="empty">
+    No applications found for this chama.
+  </div>
+
+  <!-- ✅ Loan Applications -->
+  <div *ngFor="let app of applications" class="app-card">
+    <h3>
+      {{ app.fullName }}
+      <span class="status-tag">{{ app.status | uppercase }}</span>
+    </h3>
+
+    <p><strong>Email:</strong> {{ app.email }}</p>
+    <p><strong>Phone:</strong> {{ app.phone }}</p>
+    <p><strong>Total Repayment:</strong> {{ getTotalRepayment(app) | currency }}</p>
+    <p><strong>Application Date:</strong> {{ app.createdAt | date:'mediumDate' }}</p>
+
+    <!-- ✅ Approve / Reject only if Pending -->
+    <div *ngIf="app.status?.toLowerCase() === 'pending'" class="action-buttons">
+      <button (click)="approve(app)" class="approve-btn">Approve</button>
+      <button (click)="reject(app)" class="reject-btn">Reject</button>
+    </div>
+  </div>
+</div>

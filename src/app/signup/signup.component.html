@@ -1,0 +1,33 @@
+<div class="signup-container">
+  <div class="signup-box">
+    <h2>🚀 Create Account</h2>
+    <p>Start managing loans easily!</p>
+
+    <form [formGroup]="signupForm" (ngSubmit)="onSignUp()">
+
+      <ng-container *ngFor="let field of fields">
+        <div class="form-group">
+          <label [for]="field.name">{{ field.label }}</label>
+          <input
+            [id]="field.name"
+            [type]="field.type"
+            [formControlName]="field.name"
+            [placeholder]="field.placeholder"
+          />
+          <small class="error" *ngIf="showError(field.name)">
+            {{ getErrorMessage(field.name) }}
+          </small>
+        </div>
+      </ng-container>
+
+      <button type="submit" [disabled]="signupForm.invalid" class="btn-signup">
+        Sign Up
+      </button>
+    </form>
+
+    <p class="login-link">
+      Already have an account?
+      <a routerLink="/login">Login here</a>
+    </p>
+  </div>
+</div>

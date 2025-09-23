@@ -1,0 +1,269 @@
+.chama-selection-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 15px;
+}
+
+.header h2 {
+  color: #333;
+  margin: 0;
+}
+
+.loading, .error {
+  text-align: center;
+  padding: 20px;
+  margin: 20px 0;
+}
+
+.error {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+}
+
+.chamas-section h3 {
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.chamas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.chama-card {
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  background: white;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.chama-card:hover {
+  border-color: #007bff;
+  box-shadow: 0 4px 8px rgba(0,123,255,0.1);
+}
+
+.chama-info {
+  padding: 20px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.chama-info:hover {
+  background-color: #f8f9fa;
+}
+
+.chama-info h4 {
+  margin: 0 0 10px 0;
+  color: #333;
+  font-size: 18px;
+}
+
+.chama-info p {
+  color: #666;
+  margin: 0 0 15px 0;
+  line-height: 1.4;
+}
+
+.select-hint {
+  color: #007bff;
+  font-size: 14px;
+  font-weight: 500;
+  font-style: italic;
+}
+
+.chama-actions {
+  padding: 15px 20px;
+  background-color: #f8f9fa;
+  border-top: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.join-code-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 5px;
+}
+
+.join-code-section small {
+  color: #666;
+  flex-grow: 1;
+}
+
+.join-code-section code {
+  background: #e9ecef;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: monospace;
+  color: #495057;
+}
+
+.action-btn-small {
+  background: #17a2b8;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.action-btn-small:hover {
+  background: #138496;
+}
+
+.generate-btn {
+  background: #6c757d !important;
+  align-self: flex-start;
+}
+
+.generate-btn:hover {
+  background: #545b62 !important;
+}
+
+.no-chamas {
+  text-align: center;
+  padding: 40px 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin-bottom: 30px;
+}
+
+.no-chamas h3 {
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.action-btn {
+  padding: 12px 24px;
+  border: 2px solid;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.create-btn {
+  background: #28a745;
+  color: white;
+  border-color: #28a745;
+}
+
+.create-btn:hover, .create-btn.active {
+  background: #218838;
+  border-color: #218838;
+}
+
+.join-btn {
+  background: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.join-btn:hover, .join-btn.active {
+  background: #0056b3;
+  border-color: #0056b3;
+}
+
+.form-section {
+  background: #f8f9fa;
+  padding: 30px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.form-section h4 {
+  color: #333;
+  margin: 0 0 20px 0;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #333;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+}
+
+.form-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.submit-btn {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.submit-btn:hover {
+  background: #218838;
+}
+
+.submit-btn:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+}
+
+.cancel-btn {
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.cancel-btn:hover {
+  background: #545b62;
+}

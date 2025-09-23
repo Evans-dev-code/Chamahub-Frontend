@@ -1,0 +1,181 @@
+<!-- chama-rules.component.html -->
+<div class="chama-rules-container">
+  <div class="header">
+    <h2>{{ isEditMode ? 'Update' : 'Configure' }} Chama Rules</h2>
+    <div class="header-actions">
+      <button mat-raised-button color="warn" (click)="deleteRules()" 
+              *ngIf="isEditMode" [disabled]="saving">
+        <mat-icon>delete</mat-icon>
+        Delete Rules
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Loading chama rules...</p>
+  </div>
+
+  <mat-card class="rules-card" *ngIf="!loading">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>settings</mat-icon>
+        Contribution Settings
+      </mat-card-title>
+      <mat-card-subtitle>
+        Configure how contributions work in your chama
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="rulesForm" (ngSubmit)="onSubmit()">
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="amount-field">
+            <mat-label>Monthly Contribution Amount (KES)</mat-label>
+            <input matInput type="number" formControlName="monthlyContributionAmount" min="1">
+            <mat-icon matPrefix>payments</mat-icon>
+            <mat-error *ngIf="rulesForm.get('monthlyContributionAmount')?.errors?.['required']">
+              Amount is required
+            </mat-error>
+            <mat-error *ngIf="rulesForm.get('monthlyContributionAmount')?.errors?.['min']">
+              Amount must be at least 1 KES
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="penalty-field">
+            <mat-label>Late Payment Penalty (KES)</mat-label>
+            <input matInput type="number" formControlName="penaltyForLate" min="0">
+            <mat-icon matPrefix>warning</mat-icon>
+            <mat-error *ngIf="rulesForm.get('penaltyForLate')?.errors?.['required']">
+              Penalty amount is required
+            </mat-error>
+            <mat-error *ngIf="rulesForm.get('penaltyForLate')?.errors?.['min']">
+              Penalty cannot be negative
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="cycle-field">
+            <mat-label>Contribution Cycle</mat-label>
+            <mat-select formControlName="cycleType" (selectionChange)="onCycleTypeChange()">
+              <mat-option *ngFor="let type of cycleTypes" [value]="type.value">
+                {{ type.label }}
+              </mat-option>
+            </mat-select>
+            <mat-icon matPrefix>calendar_today</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="day-field">
+            <mat-label>{{ getDayOfCycleLabel() }}</mat-label>
+            <input matInput type="number" formControlName="dayOfCycle" 
+                   [min]="rulesForm.get('cycleType')?.value === 'WEEKLY' ? 1 : 1"
+                   [max]="rulesForm.get('cycleType')?.value === 'WEEKLY' ? 7 : 31">
+            <mat-icon matPrefix>date_range</mat-icon>
+            <mat-error *ngIf="rulesForm.get('dayOfCycle')?.errors?.['required']">
+              Day is required
+            </mat-error>
+            <mat-error *ngIf="rulesForm.get('dayOfCycle')?.errors?.['min'] || rulesForm.get('dayOfCycle')?.errors?.['max']">
+              {{ rulesForm.get('cycleType')?.value === 'WEEKLY' ? 'Day must be between 1-7' : 'Day must be between 1-31' }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="grace-field">
+            <mat-label>Grace Period (Days)</mat-label>
+            <input matInput type="number" formControlName="gracePeriodDays" min="0" max="30">
+            <mat-icon matPrefix>schedule</mat-icon>
+            <mat-hint>Days after due date before penalty applies</mat-hint>
+            <mat-error *ngIf="rulesForm.get('gracePeriodDays')?.errors?.['required']">
+              Grace period is required
+            </mat-error>
+            <mat-error *ngIf="rulesForm.get('gracePeriodDays')?.errors?.['min'] || rulesForm.get('gracePeriodDays')?.errors?.['max']">
+              Grace period must be between 0-30 days
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- Help Section -->
+        <mat-expansion-panel class="help-panel">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon>help</mat-icon>
+              Need Help?
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          
+          <div class="help-content">
+            <h4>Contribution Settings Guide</h4>
+            <ul>
+              <li><strong>Monthly Contribution Amount:</strong> The fixed amount each member must contribute per cycle</li>
+              <li><strong>Late Payment Penalty:</strong> Additional fee charged when payments are made after the grace period</li>
+              <li><strong>Contribution Cycle:</strong> How often contributions are due (Weekly or Monthly)</li>
+              <li><strong>Day of Cycle:</strong> 
+                <ul>
+                  <li>For Monthly: Day of month (1-31) when payments are due</li>
+                  <li>For Weekly: Day of week (1=Monday, 7=Sunday) when payments are due</li>
+                </ul>
+              </li>
+              <li><strong>Grace Period:</strong> Number of days after due date before penalties apply</li>
+            </ul>
+          </div>
+        </mat-expansion-panel>
+
+        <!-- Action Buttons -->
+        <div class="form-actions">
+          <button mat-raised-button color="primary" type="submit" [disabled]="rulesForm.invalid || saving">
+            <mat-icon>{{ saving ? 'hourglass_empty' : 'save' }}</mat-icon>
+            {{ saving ? 'Saving...' : (isEditMode ? 'Update Rules' : 'Create Rules') }}
+          </button>
+          
+          <button mat-stroked-button type="button" (click)="resetForm()" [disabled]="saving">
+            <mat-icon>refresh</mat-icon>
+            Reset
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Current Rules Display -->
+  <mat-card class="current-rules-card" *ngIf="existingRules && !loading">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>info</mat-icon>
+        Current Rules Summary
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="rules-summary">
+        <div class="rule-item">
+          <span class="rule-label">Contribution Amount:</span>
+          <span class="rule-value">{{ existingRules.monthlyContributionAmount | currency:'KES' }}</span>
+        </div>
+        <div class="rule-item">
+          <span class="rule-label">Late Penalty:</span>
+          <span class="rule-value">{{ existingRules.penaltyForLate | currency:'KES' }}</span>
+        </div>
+        <div class="rule-item">
+          <span class="rule-label">Cycle Type:</span>
+          <span class="rule-value">{{ existingRules.cycleType }}</span>
+        </div>
+        <div class="rule-item">
+          <span class="rule-label">Due Day:</span>
+          <span class="rule-value">
+            {{ existingRules.cycleType === 'WEEKLY' ? 
+               (existingRules.dayOfCycle === 1 ? 'Monday' :
+                existingRules.dayOfCycle === 2 ? 'Tuesday' :
+                existingRules.dayOfCycle === 3 ? 'Wednesday' :
+                existingRules.dayOfCycle === 4 ? 'Thursday' :
+                existingRules.dayOfCycle === 5 ? 'Friday' :
+                existingRules.dayOfCycle === 6 ? 'Saturday' : 'Sunday') :
+               ('Day ' + existingRules.dayOfCycle + ' of month') }}
+          </span>
+        </div>
+        <div class="rule-item">
+          <span class="rule-label">Grace Period:</span>
+          <span class="rule-value">{{ existingRules.gracePeriodDays }} days</span>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

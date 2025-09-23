@@ -1,0 +1,95 @@
+<div class="chama-selection-container">
+  <div class="header">
+    <h2>Your Chamas</h2>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="loading">Loading your chamas...</div>
+
+  <!-- Error -->
+  <div *ngIf="error" class="error">{{ error }}</div>
+
+  <!-- My Chamas -->
+  <div *ngIf="!loading && chamas.length > 0" class="chamas-section">
+    <h3>My Chamas</h3>
+    <div class="chamas-grid">
+      <div *ngFor="let c of chamas" class="chama-card">
+        <!-- Main Chama Info - Clickable -->
+        <div class="chama-info" (click)="selectChama(c)">
+          <h4>{{ c.name }}</h4>
+          <p>{{ c.description }}</p>
+          <div class="select-hint">Click to enter this chama</div>
+        </div>
+        
+        <!-- Admin Actions - Not clickable for selection -->
+        <div *ngIf="isAdmin" class="chama-actions">
+          <div *ngIf="c.joinCode" class="join-code-section">
+            <small>Join code: <code>{{ c.joinCode }}</code></small>
+            <button (click)="copyCode($event, c.joinCode)" class="action-btn-small">Copy</button>
+          </div>
+          <button (click)="onGenerateCode($event, c)" class="action-btn-small generate-btn">
+            {{ c.joinCode ? 'Regenerate Code' : 'Generate Code' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- No Chamas -->
+  <div *ngIf="!loading && chamas.length === 0" class="no-chamas">
+    <h3>No Chamas Found</h3>
+    <p>You haven't created or joined any chamas yet.</p>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="actions">
+    <button (click)="toggleCreateForm()" 
+            class="action-btn create-btn" 
+            [class.active]="showCreateForm">
+      Create New Chama
+    </button>
+    <button (click)="toggleJoinForm()" 
+            class="action-btn join-btn" 
+            [class.active]="showJoinForm">
+      Join Existing Chama
+    </button>
+  </div>
+
+  <!-- Create Chama Form -->
+  <div *ngIf="showCreateForm" class="form-section">
+    <h4>Create New Chama</h4>
+    <form [formGroup]="chamaForm" (ngSubmit)="onCreateChama()">
+      <div class="form-group">
+        <label for="chamaName">Chama Name:</label>
+        <input id="chamaName" type="text" formControlName="name" placeholder="Enter chama name">
+      </div>
+      <div class="form-group">
+        <label for="chamaDescription">Description:</label>
+        <textarea id="chamaDescription" rows="3" formControlName="description" placeholder="Describe your chama's purpose"></textarea>
+      </div>
+      <div class="form-buttons">
+        <button type="submit" class="submit-btn" [disabled]="chamaForm.invalid || creating">
+          {{ creating ? 'Creating...' : 'Create Chama' }}
+        </button>
+        <button type="button" class="cancel-btn" (click)="toggleCreateForm()">Cancel</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Join Chama Form -->
+  <div *ngIf="showJoinForm" class="form-section">
+    <h4>Join Existing Chama</h4>
+    <form (ngSubmit)="onJoinChama()">
+      <div class="form-group">
+        <label for="joinCode">Join Code:</label>
+        <input id="joinCode" type="text" [(ngModel)]="joinCode" name="joinCode" placeholder="Enter 6-character join code" maxlength="6">
+      </div>
+      <div class="form-buttons">
+        <button type="submit" class="submit-btn" [disabled]="!joinCode.trim() || loading">
+          {{ loading ? 'Joining...' : 'Join Chama' }}
+        </button>
+        <button type="button" class="cancel-btn" (click)="toggleJoinForm()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>

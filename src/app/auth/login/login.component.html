@@ -1,0 +1,39 @@
+<div class="login-container">
+  <div class="login-box">
+    <h2>Login</h2>
+    <p>Enter your credentials to access your account.</p>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="usernameOrEmail">Username or Email</label>
+        <input 
+          id="usernameOrEmail" 
+          type="text" 
+          placeholder="Enter your username or email"
+          formControlName="usernameOrEmail"
+          required
+        />
+        <small *ngIf="loginForm.controls['usernameOrEmail'].invalid && loginForm.controls['usernameOrEmail'].touched" class="error">
+          Username or Email is required
+        </small>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input 
+          id="password" 
+          type="password" 
+          placeholder="Enter your password"
+          formControlName="password"
+          required
+        />
+        <small *ngIf="loginForm.controls['password'].invalid && loginForm.controls['password'].touched" class="error">
+          Password must be at least 6 characters
+        </small>
+      </div>
+      <button type="submit" class="btn-login" [disabled]="loginForm.invalid">Login</button>
+    </form>
+    <div class="links">
+      <a routerLink="/signup" class="signup-link">Don't have an account? <strong>Sign Up</strong></a>
+    </div>
+  </div>
+</div>

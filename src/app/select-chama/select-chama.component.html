@@ -1,0 +1,28 @@
+<div class="select-chama-container">
+  <h2>My Chamas</h2>
+
+  <!-- Logout Button -->
+  <button class="logout-btn" (click)="logout()">Logout</button>
+
+  <div *ngIf="loading">Loading...</div>
+
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+  <ul *ngIf="!loading && chamas.length > 0">
+    <li *ngFor="let chama of chamas">
+      <span>{{ chama.name }}</span>
+      <button (click)="enterChama(chama)">Enter</button>
+    </li>
+  </ul>
+
+  <div *ngIf="!loading && chamas.length === 0">
+    <p>You haven’t joined any Chamas yet.</p>
+  </div>
+
+  <div class="join-section">
+    <h3>Join a Chama</h3>
+    <!-- ✅ ngModel binding stays fine (string type expected for joinCode) -->
+    <input [(ngModel)]="joinCode" placeholder="Enter Join Code" />
+    <button (click)="joinChama()">Join</button>
+  </div>
+</div>

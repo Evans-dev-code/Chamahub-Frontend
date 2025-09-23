@@ -1,0 +1,98 @@
+<div class="loan-container">
+  <div class="loan-info">
+    <h2>Loan Types & Information</h2>
+    <p>We offer a variety of loans to suit your needs. Learn more about each type and how they work:</p>
+    
+    <div class="loan-type-info">
+      <h3>Personal Loan</h3>
+      <p>
+        A personal loan is ideal for individuals who need financial assistance for personal purposes. It can be used for debt consolidation, home improvements, medical expenses, or other personal needs.
+      </p>
+    </div>
+    <div class="loan-type-info">
+      <h3>Mortgage Loan</h3>
+      <p>
+        A mortgage loan helps individuals or families purchase homes or refinance an existing mortgage. We offer competitive rates with flexible terms.
+      </p>
+    </div>
+    <div class="loan-type-info">
+      <h3>Business Loan</h3>
+      <p>
+        A business loan can help fund your company’s growth, equipment purchase, or other operational needs. We provide financing to businesses of all sizes.
+      </p>
+    </div>
+    <div class="loan-type-info">
+      <h3>Auto Loan</h3>
+      <p>
+        An auto loan is designed to help you finance the purchase of a new or used vehicle. We offer fast approval and flexible repayment terms.
+      </p>
+    </div>
+  </div>
+
+  <form [formGroup]="loanForm" (ngSubmit)="applyLoan()">
+    <div class="form-group">
+      <label for="loanType">Loan Type</label>
+      <select id="loanType" formControlName="loanType" (change)="onLoanTypeChange()">
+        <option value="">Select Loan Type</option>
+        <option value="personal">Personal Loan</option>
+        <option value="business">Business Loan</option>
+        <option value="mortgage">Mortgage Loan</option>
+        <option value="auto">Auto Loan</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="fullName">Full Name</label>
+      <input id="fullName" formControlName="fullName" />
+    </div>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input id="email" formControlName="email" />
+    </div>
+    <div class="form-group">
+      <label for="phone">Phone Number</label>
+      <input id="phone" formControlName="phone" (input)="validateNumber($event)" />
+    </div>
+    <div class="form-group">
+      <label for="amount">Loan Amount</label>
+      <input id="amount" formControlName="amount" type="number" />
+    </div>
+    <div class="form-group">
+      <label for="duration">Duration (months)</label>
+      <select id="duration" formControlName="duration">
+        <option value="">Select Duration</option>
+        <option *ngFor="let m of [].constructor(35); let i = index" [value]="i + 2">
+          {{ i + 2 }} months
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="purpose">Purpose</label>
+      <input id="purpose" formControlName="purpose" />
+    </div>
+    <div *ngIf="loanForm.controls['loanType'].value === 'business' || loanForm.controls['loanType'].value === 'auto'" class="form-group">
+      <label for="salary">Salary</label>
+      <input id="salary" formControlName="salary" type="number" />
+    </div>
+    <div *ngIf="loanForm.controls['loanType'].value === 'personal'" class="form-group">
+      <label for="personalLoanInfo">Personal Loan Info</label>
+      <input id="personalLoanInfo" formControlName="personalLoanInfo" />
+    </div>
+    <div *ngIf="loanForm.controls['loanType'].value === 'mortgage'" class="form-group">
+      <label for="mortgagePropertyValue">Property Value</label>
+      <input id="mortgagePropertyValue" formControlName="mortgagePropertyValue" type="number" />
+    </div>
+    <div class="form-group">
+      <label for="interestRate">Interest Rate (%)</label>
+      <input id="interestRate" formControlName="interestRate" />
+    </div>
+    <div class="form-group">
+      <label for="totalRepayment">Total Repayment (Ksh)</label>
+      <input id="totalRepayment" formControlName="totalRepayment" />
+    </div>
+    <button type="submit">Submit Application</button>
+    <div class="back-btn">
+    <button type="button" (click)="goBack()">Back to Dashboard</button>
+    </div>
+  </form>
+</div>

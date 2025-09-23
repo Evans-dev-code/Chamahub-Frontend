@@ -1,0 +1,45 @@
+<div class="container">
+  <div class="loan-status-container">
+    <h2>Your Loan Applications</h2>
+
+    <div *ngIf="loading" class="loading-message">Loading your applications...</div>
+
+    <div *ngIf="!loading">
+      <div *ngIf="hasApplications; else noApps">
+        <ul class="applications-list">
+          <li *ngFor="let app of userApplications" class="application-item">
+            <strong>Application ID:</strong> {{ app.id }}<br />
+            <strong>Status:</strong> {{ app.status || 'Pending' }}<br />
+            <strong>Loan Amount:</strong> {{ app.amount | currency:'USD' }}<br />
+            <strong>Total Repayment:</strong> {{ getTotalRepayment(app) | currency:'USD' }}<br />
+            <strong>Amount Paid:</strong> {{ getPaidAmount(app.id) | currency:'USD' }}<br />
+            <strong>Outstanding Balance:</strong> {{ getOutstandingBalance(app) | currency:'USD' }}<br />
+            <strong>Loan Type:</strong> {{ app.loanType }}<br />
+            <strong>Duration:</strong> {{ app.duration || 0 }} months<br />
+            <strong>Interest Rate:</strong> {{ app.interestRate || 0 }}%<br />
+            <strong>Submitted On:</strong> {{ app.createdAt | date:'mediumDate' }}<br />
+
+            <!-- ✅ Progress Bar -->
+            <div class="progress my-2" style="height: 20px;">
+              <div
+                class="progress-bar bg-success"
+                role="progressbar"
+                [style.width.%]="getProgressPercent(app) || 0"
+                [attr.aria-valuenow]="getProgressPercent(app) || 0"
+                aria-valuemin="0"
+                aria-valuemax="100">
+                {{ getProgressPercent(app) || 0 }}%
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <ng-template #noApps>
+        <p>You have no loan applications at the moment.</p>
+      </ng-template>
+    </div>
+
+    <button (click)="goBack()" class="btn btn-primary mt-3">Back to Dashboard</button>
+  </div>
+</div>

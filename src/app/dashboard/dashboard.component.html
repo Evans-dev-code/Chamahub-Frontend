@@ -1,0 +1,87 @@
+<div class="dashboard">
+  <div class="header">
+    <h1>ChamaHub💰 Admin Dashboard</h1>
+  </div>
+
+  <div *ngIf="error" class="error-message">{{ error }}</div>
+
+  <div *ngIf="!error">
+    <!-- Stats -->
+    <div class="stats">
+      <div class="stat-box">
+        <h3>Total Members</h3>
+        <p>{{ totalMembers }}</p>
+      </div>
+
+      <div class="stat-box">
+        <h3>Active Loans</h3>
+        <p>{{ activeLoans }}</p>
+      </div>
+
+      <div class="stat-box">
+        <h3>Total Loan Value</h3>
+        <p>${{ totalLoanValue | number:'1.0-0' }}</p>
+      </div>
+
+      <div class="stat-box">
+        <h3>Outstanding Balance</h3>
+        <p>${{ outstandingBalance | number:'1.0-0' }}</p>
+      </div>
+
+      <div class="stat-box">
+        <h3>Total Repayment Made</h3>
+        <p>${{ totalRepayment | number:'1.0-0' }}</p>
+      </div>
+
+      <div class="stat-box">
+        <h3>Total Value Given</h3>
+        <p>${{ totalValueGiven | number:'1.0-0' }}</p>
+      </div>
+
+      <div class="stat-box">
+        <h3>Total Repayment Expected</h3>
+        <p>${{ totalRepaymentExpected | number:'1.0-0' }}</p>
+      </div>
+
+      <div class="stat-box">
+        <h3>Total Profit</h3>
+        <p>${{ totalProfit | number:'1.0-0' }}</p>
+      </div>
+    </div>
+
+    <!-- Loan stats -->
+    <div class="loan-stats">
+      <h2>Loan Stats by Type</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Loan Type</th>
+            <th>Count</th>
+            <th>Total Loan Value</th>
+            <th>Profit</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let loanType of loanStatsByType | keyvalue">
+            <td>{{ loanType.key }}</td>
+            <td>{{ loanType.value.count }}</td>
+            <td>${{ loanType.value.total | number:'1.0-0' }}</td>
+            <td>${{ loanType.value.profit | number:'1.0-0' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Recent transactions -->
+    <div class="recent-transactions">
+      <h2>Recent Transactions</h2>
+      <div *ngFor="let transaction of transactions" class="transaction">
+        <p><strong>Loan Amount:</strong> ${{ transaction.amount | number:'1.0-0' }}</p>
+        <p><strong>Status:</strong> {{ transaction.status }}</p>
+        <p><strong>Loan Type:</strong> {{ transaction.loanType }}</p>
+        <p><strong>Interest Rate:</strong> {{ transaction.interestRate }}%</p>
+        <p><strong>Total Repayment:</strong> ${{ transaction.totalRepayment || 0 | number:'1.0-0' }}</p>
+      </div>
+    </div>
+  </div>
+</div>
