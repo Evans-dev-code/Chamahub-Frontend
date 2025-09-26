@@ -136,46 +136,45 @@
     </mat-card-content>
   </mat-card>
 
-  <!-- Current Rules Display -->
   <mat-card class="current-rules-card" *ngIf="existingRules && !loading">
-    <mat-card-header>
-      <mat-card-title>
-        <mat-icon>info</mat-icon>
-        Current Rules Summary
-      </mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <div class="rules-summary">
-        <div class="rule-item">
-          <span class="rule-label">Contribution Amount:</span>
-          <span class="rule-value">{{ existingRules.monthlyContributionAmount | currency:'KES' }}</span>
-        </div>
-        <div class="rule-item">
-          <span class="rule-label">Late Penalty:</span>
-          <span class="rule-value">{{ existingRules.penaltyForLate | currency:'KES' }}</span>
-        </div>
-        <div class="rule-item">
-          <span class="rule-label">Cycle Type:</span>
-          <span class="rule-value">{{ existingRules.cycleType }}</span>
-        </div>
-        <div class="rule-item">
-          <span class="rule-label">Due Day:</span>
-          <span class="rule-value">
-            {{ existingRules.cycleType === 'WEEKLY' ? 
-               (existingRules.dayOfCycle === 1 ? 'Monday' :
-                existingRules.dayOfCycle === 2 ? 'Tuesday' :
-                existingRules.dayOfCycle === 3 ? 'Wednesday' :
-                existingRules.dayOfCycle === 4 ? 'Thursday' :
-                existingRules.dayOfCycle === 5 ? 'Friday' :
-                existingRules.dayOfCycle === 6 ? 'Saturday' : 'Sunday') :
-               ('Day ' + existingRules.dayOfCycle + ' of month') }}
-          </span>
-        </div>
-        <div class="rule-item">
-          <span class="rule-label">Grace Period:</span>
-          <span class="rule-value">{{ existingRules.gracePeriodDays }} days</span>
-        </div>
+  <mat-card-header>
+    <mat-card-title>
+      <mat-icon>info</mat-icon>
+      Current Rules Summary
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="rules-summary">
+      <div class="rule-item">
+        <span class="rule-label">Contribution Amount:</span>
+        <span class="rule-value">{{ existingRules.monthlyContributionAmount | currency:'KES' }}</span>
       </div>
-    </mat-card-content>
-  </mat-card>
+      <div class="rule-item">
+        <span class="rule-label">Late Penalty:</span>
+        <span class="rule-value">{{ existingRules.penaltyForLate | currency:'KES' }}</span>
+      </div>
+      <div class="rule-item">
+        <span class="rule-label">Cycle Type:</span>
+        <span class="rule-value">{{ existingRules.cycleType }}</span>
+      </div>
+      <div class="rule-item">
+        <span class="rule-label">Due Day:</span>
+        <span class="rule-value">
+          {{ existingRules.cycleType === 'WEEKLY' ? 
+             (existingRules.dayOfCycle === 1 ? 'Monday' :
+              existingRules.dayOfCycle === 2 ? 'Tuesday' :
+              existingRules.dayOfCycle === 3 ? 'Wednesday' :
+              existingRules.dayOfCycle === 4 ? 'Thursday' :
+              existingRules.dayOfCycle === 5 ? 'Friday' :
+              existingRules.dayOfCycle === 6 ? 'Saturday' : 'Sunday') :
+             ('Day ' + existingRules.dayOfCycle + ' of month') }}
+        </span>
+      </div>
+      <div class="rule-item">
+        <span class="rule-label">Grace Period:</span>
+        <span class="rule-value">{{ existingRules.gracePeriodDays }} days</span>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
 </div>

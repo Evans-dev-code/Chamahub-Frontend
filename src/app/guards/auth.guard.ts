@@ -19,12 +19,12 @@ export class AuthGuard implements CanActivate {
     }
 
     const url = state.url;
-    const role = this.authService.getRole()?.toLowerCase();
+    const activeChama = localStorage.getItem('activeChamaId');
 
-    // Redirect users to chama selection if required
-    if ((role === 'user' || role === 'admin') && !localStorage.getItem('activeChamaId') && !url.includes('chama-selection')) {
-      console.warn('⚠️ No active chama. Redirecting to chama-selection.');
-      this.router.navigate(['/chama-selection']);
+    // ✅ Redirect to select-chama if no chama is chosen
+    if (!activeChama && !url.includes('select-chama')) {
+      console.warn('⚠️ No active chama. Redirecting to select-chama.');
+      this.router.navigate(['/select-chama']);
       return false;
     }
 

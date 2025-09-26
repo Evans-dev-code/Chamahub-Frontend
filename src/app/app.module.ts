@@ -1,15 +1,14 @@
-// app.module.ts
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
+import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { SharedModule } from './shared.module';
 
 // Components
 import { AppComponent } from './app.component';
-import { NavbarComponent } from './navbar/navbar.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 
@@ -32,6 +31,8 @@ import { ChamaManagementComponent } from './chama-management/chama-management.co
 import { ChamaRulesComponent } from './components/chama-rules/chama-rules.component';
 import { UserContributionsComponent } from './components/user-contributions/user-contributions.component';
 import { ContributionsAdminComponent } from './components/contributions-admin/contributions-admin.component';
+import { NavbarComponent } from './navbar/navbar.component';
+import { PaymentConfirmDialogComponent } from './components/payment-confirm-dialog/payment-confirm-dialog.component';
 
 // Services & Guards
 import { AuthService } from './services/auth.service';
@@ -45,7 +46,6 @@ import { AuthInterceptor } from './auth/interceptor.service';
 @NgModule({
   declarations: [
     AppComponent,
-    NavbarComponent,
     DashboardComponent,
     UserDashboardComponent,
     AuthLayoutComponent,
@@ -63,15 +63,18 @@ import { AuthInterceptor } from './auth/interceptor.service';
     ChamaManagementComponent,
     ChamaRulesComponent,
     UserContributionsComponent,
-    ContributionsAdminComponent
+    ContributionsAdminComponent,
+    NavbarComponent,
+    PaymentConfirmDialogComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    SharedModule,
+    RouterModule,
     AppRoutingModule,
-    ToastrModule.forRoot(),
-    SharedModule // All common imports (FormsModule, ReactiveFormsModule, CommonModule, RouterModule, Material) here
+    ToastrModule.forRoot()
   ],
   providers: [
     AuthService,
@@ -82,6 +85,7 @@ import { AuthInterceptor } from './auth/interceptor.service';
     AdminGuard,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule {}

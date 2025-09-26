@@ -1,1 +1,157 @@
-<p>user-contributions works!</p>
+<div class="contributions-container">
+  <div class="header">
+    <h2>My Contributions</h2>
+    <div class="header-actions">
+      <!-- Back Button -->
+      <button mat-stroked-button color="accent" routerLink="/user-dashboard">
+        <mat-icon>arrow_back</mat-icon>
+        Back to Dashboard
+      </button>
+
+      <!-- Refresh Button -->
+      <button mat-raised-button color="primary" (click)="refreshData()" [disabled]="loading">
+        <mat-icon *ngIf="!loading">refresh</mat-icon>
+        <mat-spinner *ngIf="loading" diameter="20"></mat-spinner>
+        <span *ngIf="!loading">Refresh</span>
+        <span *ngIf="loading">Refreshing...</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Owed Amount Card -->
+  <mat-card class="owed-card" *ngIf="owedInfo as info">
+    <mat-card-header>
+      <mat-card-title>Current Status</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="status-grid">
+        <div class="status-item">
+          <span class="label">Current Cycle:</span>
+          <span class="value">{{ info.currentCycle }}</span>
+        </div>
+        <div class="status-item">
+          <span class="label">Expected Amount:</span>
+          <span class="value currency">{{ info.expectedAmount | currency:'KES' }}</span>
+        </div>
+        <div class="status-item">
+          <span class="label">Amount Owed:</span>
+          <span class="value currency" [ngClass]="{'owed': info.amountOwed > 0, 'paid': info.amountOwed === 0}">
+            {{ info.amountOwed | currency:'KES' }}
+          </span>
+        </div>
+        <div class="status-item">
+          <span class="label">Status:</span>
+          <mat-chip [color]="getStatusColor(info.status)" selected>
+            {{ info.status }}
+          </mat-chip>
+        </div>
+        <div class="status-item" *ngIf="info.dueDate">
+          <span class="label">Due Date:</span>
+          <span class="value">{{ info.dueDate | date:'mediumDate' }}</span>
+        </div>
+        <div class="status-item" *ngIf="info.penaltyAmount && info.penaltyAmount > 0">
+          <span class="label">Penalty:</span>
+          <span class="value penalty">{{ info.penaltyAmount | currency:'KES' }}</span>
+        </div>
+      </div>
+    </mat-card-content>
+
+    <!-- Payment Button -->
+    <mat-card-actions *ngIf="info.amountOwed > 0" align="end">
+      <button mat-raised-button color="accent" (click)="openPaymentForm(info)" [disabled]="paymentLoading">
+        <mat-icon *ngIf="!paymentLoading">payment</mat-icon>
+        <mat-spinner *ngIf="paymentLoading" diameter="20"></mat-spinner>
+        <span *ngIf="!paymentLoading">Pay Now</span>
+        <span *ngIf="paymentLoading">Processing...</span>
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+  <!-- Summary Card -->
+  <mat-card class="summary-card">
+    <mat-card-header>
+      <mat-card-title>Summary</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <span class="summary-number">{{ contributions.length }}</span>
+          <span class="summary-label">Total Contributions</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-number">{{ totalContributed | currency:'KES' }}</span>
+          <span class="summary-label">Total Contributed</span>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Contributions Table -->
+  <mat-card class="table-card">
+    <mat-card-header>
+      <mat-card-title>Contribution History</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <!-- Loading -->
+      <div *ngIf="loading" class="loading-container">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>Loading contributions...</p>
+      </div>
+
+      <!-- No Data -->
+      <div *ngIf="!loading && contributions.length === 0" class="no-data">
+        <mat-icon>info</mat-icon>
+        <p>No contributions found for the current chama.</p>
+      </div>
+
+      <!-- Table -->
+      <table mat-table [dataSource]="contributions" class="contributions-table" *ngIf="!loading && contributions.length > 0">
+        <!-- Cycle Column -->
+        <ng-container matColumnDef="cycle">
+          <th mat-header-cell *matHeaderCellDef>Cycle</th>
+          <td mat-cell *matCellDef="let contribution">{{ contribution.cycle }}</td>
+        </ng-container>
+
+        <!-- Amount Column -->
+        <ng-container matColumnDef="amount">
+          <th mat-header-cell *matHeaderCellDef>Amount</th>
+          <td mat-cell *matCellDef="let contribution">
+            <span class="amount">{{ contribution.amount | currency:'KES' }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Date Paid Column -->
+        <ng-container matColumnDef="datePaid">
+          <th mat-header-cell *matHeaderCellDef>Date Paid</th>
+          <td mat-cell *matCellDef="let contribution">{{ contribution.datePaid | date:'mediumDate' }}</td>
+        </ng-container>
+
+        <!-- Status Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let contribution">
+            <mat-chip [color]="getStatusColor(contribution.status)" selected>
+              {{ contribution.status }}
+            </mat-chip>
+          </td>
+        </ng-container>
+
+        <!-- Penalty Column -->
+        <ng-container matColumnDef="penalty">
+          <th mat-header-cell *matHeaderCellDef>Penalty</th>
+          <td mat-cell *matCellDef="let contribution">
+            <span *ngIf="contribution.penaltyAmount && contribution.penaltyAmount > 0" class="penalty">
+              {{ contribution.penaltyAmount | currency:'KES' }}
+            </span>
+            <span *ngIf="!contribution.penaltyAmount || contribution.penaltyAmount === 0" class="no-penalty">
+              None
+            </span>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+</div>

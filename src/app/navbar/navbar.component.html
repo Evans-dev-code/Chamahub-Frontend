@@ -1,7 +1,7 @@
 <nav class="sidebar" *ngIf="isAdminUser">
   <div class="sidebar-container">
     <!-- Logo -->
-    <a routerLink="/dashboard" class="sidebar-logo">ChamaHub💰</a>
+    <a routerLink="dashboard" class="sidebar-logo">ChamaHub💰</a>
 
     <!-- Active Chama Display -->
     <div class="active-chama" *ngIf="activeChamaId">
@@ -19,15 +19,14 @@
       <button (click)="switchChama()" class="switch-chama-btn">Select Chama</button>
     </div>
 
-    <!-- Links -->
     <ul class="sidebar-links">
-      <li><a routerLink="/dashboard" routerLinkActive="active" class="nav-link">📊 Dashboard</a></li>
-      <li><a routerLink="/loan-approval" routerLinkActive="active" class="nav-link">✅ Loan Approval</a></li>
-      <li><a routerLink="/user-management" routerLinkActive="active" class="nav-link">👥 User Management</a></li>
-      <li><a routerLink="/admin-loan-payment" routerLinkActive="active" class="nav-link">💵 Loan Payment</a></li>
-      <li><a routerLink="/chama-rules" routerLinkActive="active" class="nav-link">📜 Chama Rules</a></li>
-      <li><a routerLink="/admin-contribution" routerLinkActive="active" class="nav-link">💰 Contributions</a></li>
-      <li><a (click)="logout()" class="nav-link logout-link">🚪 Logout</a></li>
-    </ul>
+  <li><a routerLink="/dashboard" routerLinkActive="active" class="nav-link">📊 Dashboard</a></li>
+  <li><a routerLink="/loan-approval" routerLinkActive="active" class="nav-link">✅ Loan Approval</a></li>
+  <li><a routerLink="/user-management" routerLinkActive="active" class="nav-link">👥 User Management</a></li>
+  <li><a routerLink="/admin-loan-payment" routerLinkActive="active" class="nav-link">💵 Loan Payment</a></li>
+  <li><a routerLink="/chama-rules" routerLinkActive="active" class="nav-link">📜 Chama Rules</a></li>
+  <li><a routerLink="/contributions-admin" routerLinkActive="active" class="nav-link">💰 Contributions</a></li>
+  <li><a (click)="logout()" class="nav-link logout-link">🚪 Logout</a></li>
+</ul>
   </div>
 </nav>

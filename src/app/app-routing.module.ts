@@ -39,7 +39,7 @@ const routes: Routes = [
   canActivate: [AdminGuard],
   children: [
     { path: 'dashboard', component: DashboardComponent },
-    { path: 'admin-contribution', component: ContributionsAdminComponent },
+    { path: 'contributions-admin', component: ContributionsAdminComponent },
     { path: 'chama-rules', component: ChamaRulesComponent },
     { path: 'user-management', component: UserManagementComponent },
     { path: 'loan-approval', component: LoanApprovalComponent },

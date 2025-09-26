@@ -1,1 +1,188 @@
-<p>admin-contribution works!</p>
+<div class="admin-contributions-container">
+  <div class="header">
+    <h2>Manage Contributions</h2>
+    <div class="header-actions">
+      <button mat-raised-button color="primary" (click)="refreshData()" [disabled]="loading">
+        <mat-icon>refresh</mat-icon>
+        Refresh
+      </button>
+    </div>
+  </div>
+
+  <!-- Filters Section -->
+  <mat-card class="filters-card">
+    <mat-card-content>
+      <div class="filters-row">
+        <!-- Select Chama -->
+        <mat-form-field appearance="outline" class="chama-select">
+          <mat-label>Select Chama</mat-label>
+          <mat-select [(ngModel)]="selectedChamaId" (selectionChange)="onChamaChange($event.value)">
+            <mat-option *ngFor="let chama of chamas" [value]="chama.id">
+              {{ chama.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Select Cycle -->
+        <mat-form-field appearance="outline" class="cycle-select">
+          <mat-label>Filter by Cycle</mat-label>
+          <mat-select [(ngModel)]="selectedCycle" (selectionChange)="onCycleChange($event.value)">
+            <mat-option value="">All Cycles</mat-option>
+            <mat-option *ngFor="let cycle of availableCycles" [value]="cycle">
+              {{ cycle }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Search -->
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-label>Search</mat-label>
+          <input matInput (keyup)="applyFilter($event)" placeholder="Search by member name">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Stats Cards -->
+  <div class="stats-row" *ngIf="selectedChamaId">
+    <mat-card class="stat-card total">
+      <mat-card-content>
+        <div class="stat-content">
+          <mat-icon>payments</mat-icon>
+          <div class="stat-text">
+            <span class="stat-number">{{ totalContributions }}</span>
+            <span class="stat-label">Total Contributions</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card success">
+      <mat-card-content>
+        <div class="stat-content">
+          <mat-icon>check_circle</mat-icon>
+          <div class="stat-text">
+            <span class="stat-number">{{ onTimeContributions }}</span>
+            <span class="stat-label">On Time</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card warning">
+      <mat-card-content>
+        <div class="stat-content">
+          <mat-icon>warning</mat-icon>
+          <div class="stat-text">
+            <span class="stat-number">{{ lateContributions }}</span>
+            <span class="stat-label">Late Payments</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Export Actions -->
+  <div class="export-actions" *ngIf="dataSource.data.length > 0">
+    <button mat-stroked-button (click)="exportToCSV()">
+      <mat-icon>download</mat-icon>
+      Export CSV
+    </button>
+    <button mat-stroked-button (click)="exportToExcel()">
+      <mat-icon>download</mat-icon>
+      Export Excel
+    </button>
+  </div>
+
+  <!-- Contributions Table -->
+  <mat-card class="table-card">
+    <mat-card-content>
+      <div *ngIf="loading" class="loading-container">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>Loading contributions...</p>
+      </div>
+
+      <div *ngIf="!loading && !selectedChamaId" class="no-chama-selected">
+        <mat-icon>info</mat-icon>
+        <p>Please select a chama to view contributions.</p>
+      </div>
+
+      <div *ngIf="!loading && selectedChamaId && dataSource.data.length === 0" class="no-data">
+        <mat-icon>inbox</mat-icon>
+        <p>No contributions found for the selected criteria.</p>
+      </div>
+
+      <table mat-table [dataSource]="dataSource" matSort class="contributions-table"
+             *ngIf="!loading && selectedChamaId && dataSource.data.length > 0">
+        
+        <!-- Member Name Column -->
+        <ng-container matColumnDef="memberName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Member</th>
+          <td mat-cell *matCellDef="let contribution">{{ contribution.memberName }}</td>
+        </ng-container>
+
+        <!-- Cycle Column -->
+        <ng-container matColumnDef="cycle">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Cycle</th>
+          <td mat-cell *matCellDef="let contribution">{{ contribution.cycle }}</td>
+        </ng-container>
+
+        <!-- Amount Column -->
+        <ng-container matColumnDef="amount">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Amount</th>
+          <td mat-cell *matCellDef="let contribution">
+            <span class="amount">{{ contribution.amount | currency:'KES' }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Date Paid Column -->
+        <ng-container matColumnDef="datePaid">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Date Paid</th>
+          <td mat-cell *matCellDef="let contribution">{{ contribution.datePaid | date:'mediumDate' }}</td>
+        </ng-container>
+
+        <!-- Status Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+          <td mat-cell *matCellDef="let contribution">
+            <mat-chip [color]="getStatusColor(contribution.status)" selected
+                      [ngClass]="{'late-chip': contribution.status === 'LATE'}">
+              {{ contribution.status }}
+            </mat-chip>
+          </td>
+        </ng-container>
+
+        <!-- Penalty Column -->
+        <ng-container matColumnDef="penalty">
+          <th mat-header-cell *matHeaderCellDef>Penalty</th>
+          <td mat-cell *matCellDef="let contribution">
+            <span *ngIf="contribution.penaltyAmount && contribution.penaltyAmount > 0" class="penalty">
+              {{ contribution.penaltyAmount | currency:'KES' }}
+            </span>
+            <span *ngIf="!contribution.penaltyAmount || contribution.penaltyAmount === 0" class="no-penalty">
+              -
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let contribution">
+            <button mat-icon-button (click)="viewContributionDetails(contribution)" 
+                    matTooltip="View Details">
+              <mat-icon>visibility</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+            [ngClass]="{'late-row': row.status === 'LATE'}"></tr>
+      </table>
+
+      <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" showFirstLastButtons></mat-paginator>
+    </mat-card-content>
+  </mat-card>
+</div>
