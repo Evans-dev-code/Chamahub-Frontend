@@ -1,33 +1,56 @@
 <div class="signup-container">
   <div class="signup-box">
-    <h2>🚀 Create Account</h2>
-    <p>Start managing loans easily!</p>
+    <h2>Join Your Chama Community</h2>
+    <p>Manage contributions and loans seamlessly. Create your account to unlock Chama benefits!</p>
 
     <form [formGroup]="signupForm" (ngSubmit)="onSignUp()">
-
       <ng-container *ngFor="let field of fields">
         <div class="form-group">
           <label [for]="field.name">{{ field.label }}</label>
+
           <input
             [id]="field.name"
-            [type]="field.type"
+            [type]="isPasswordField(field.name) ? (showPassword[field.name] ? 'text' : 'password') : field.type"
             [formControlName]="field.name"
             [placeholder]="field.placeholder"
           />
+
+          <button *ngIf="isPasswordField(field.name)" type="button" class="show-password" (click)="toggleShowPassword(field.name)">
+            {{ showPassword[field.name] ? 'Hide' : 'Show' }}
+          </button>
+
           <small class="error" *ngIf="showError(field.name)">
             {{ getErrorMessage(field.name) }}
           </small>
+
+          <div *ngIf="field.name === 'password'" class="password-strength" [ngClass]="passwordStrengthClass">
+            <div class="strength-bar" [style.width.%]="passwordStrengthPercent"></div>
+          </div>
         </div>
       </ng-container>
 
-      <button type="submit" [disabled]="signupForm.invalid" class="btn-signup">
+      <div class="tooltip">
+        ℹ️ What is Chama?
+        <span class="tooltiptext">
+          A Chama is a group savings and investment club. Contributions grow over time and loans are available based on member contributions.
+        </span>
+      </div>
+
+      <button type="submit" [disabled]="signupForm.invalid || usernameAvailable === false || emailAvailable === false" class="btn-signup">
         Sign Up
       </button>
     </form>
 
     <p class="login-link">
-      Already have an account?
-      <a routerLink="/login">Login here</a>
+      Already have an account? <a routerLink="/login">Login here</a>
     </p>
+
+    <div class="extra-info">
+      <ul>
+        <li>Track Chama contributions and loans in one place</li>
+        <li>Monitor monthly distributions</li>
+        <li>Safe and secure platform</li>
+      </ul>
+    </div>
   </div>
 </div>

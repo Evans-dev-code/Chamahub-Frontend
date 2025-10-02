@@ -1,8 +1,9 @@
 <div class="loan-container">
+  <!-- Left Side: Loan Info -->
   <div class="loan-info">
     <h2>Loan Types & Information</h2>
     <p>We offer a variety of loans to suit your needs. Learn more about each type and how they work:</p>
-    
+
     <div class="loan-type-info">
       <h3>Personal Loan</h3>
       <p>
@@ -27,9 +28,34 @@
         An auto loan is designed to help you finance the purchase of a new or used vehicle. We offer fast approval and flexible repayment terms.
       </p>
     </div>
+
+    <!-- Additional Info to Balance Form Side -->
+    <div class="loan-additional-info">
+      <h3>Benefits of Our Loans</h3>
+      <ul>
+        <li>Competitive interest rates.</li>
+        <li>Flexible repayment plans.</li>
+        <li>Quick and easy approval process.</li>
+        <li>Support for personal, business, and property investments.</li>
+      </ul>
+
+      <h3>Eligibility Criteria</h3>
+      <ul>
+        <li>Must be 18 years or older.</li>
+        <li>Valid government ID and proof of income.</li>
+        <li>Good credit standing preferred.</li>
+      </ul>
+
+      <h3>Repayment Details</h3>
+      <p>
+        Repayment schedules are monthly. You can prepay without penalties and track your outstanding balance easily using your dashboard.
+      </p>
+    </div>
   </div>
 
+  <!-- Right Side: Loan Form -->
   <form [formGroup]="loanForm" (ngSubmit)="applyLoan()">
+    <h2>Apply for a Loan</h2>
     <div class="form-group">
       <label for="loanType">Loan Type</label>
       <select id="loanType" formControlName="loanType" (change)="onLoanTypeChange()">
@@ -40,6 +66,7 @@
         <option value="auto">Auto Loan</option>
       </select>
     </div>
+
     <div class="form-group">
       <label for="fullName">Full Name</label>
       <input id="fullName" formControlName="fullName" />
@@ -90,9 +117,10 @@
       <label for="totalRepayment">Total Repayment (Ksh)</label>
       <input id="totalRepayment" formControlName="totalRepayment" />
     </div>
+
     <button type="submit">Submit Application</button>
     <div class="back-btn">
-    <button type="button" (click)="goBack()">Back to Dashboard</button>
+      <button type="button" (click)="goBack()">Back to Dashboard</button>
     </div>
   </form>
 </div>

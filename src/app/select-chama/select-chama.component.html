@@ -1,28 +1,61 @@
 <div class="select-chama-container">
-  <h2>My Chamas</h2>
-
-  <!-- Logout Button -->
-  <button class="logout-btn" (click)="logout()">Logout</button>
-
-  <div *ngIf="loading">Loading...</div>
-
-  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
-
-  <ul *ngIf="!loading && chamas.length > 0">
-    <li *ngFor="let chama of chamas">
-      <span>{{ chama.name }}</span>
-      <button (click)="enterChama(chama)">Enter</button>
-    </li>
-  </ul>
-
-  <div *ngIf="!loading && chamas.length === 0">
-    <p>You haven’t joined any Chamas yet.</p>
+  <!-- 🔝 Header -->
+  <div class="header">
+    <h1>💰 My Chamas</h1>
+    <button class="logout-btn" (click)="logout()">🚪 Logout</button>
   </div>
 
+  <!-- 🔄 Loading & Error States -->
+  <div *ngIf="loading" class="loading">Loading your chamas...</div>
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+  <!-- 🔍 Search & Filter Bar -->
+  <div *ngIf="!loading && chamas.length > 0" class="search-filter">
+    <input
+      type="text"
+      placeholder="🔍 Search by name..."
+      [(ngModel)]="searchTerm"
+      (input)="filterChamas()"
+      class="search-input"
+    />
+
+    <select [(ngModel)]="filterType" (change)="filterChamas()" class="filter-select">
+      <option value="">All</option>
+      <option value="active">Active Chamas</option>
+      <option value="inactive">Inactive Chamas</option>
+    </select>
+  </div>
+
+  <!-- 📊 Chama List -->
+  <div *ngIf="!loading && filteredChamas.length > 0" class="chama-grid">
+    <div class="chama-card" *ngFor="let chama of filteredChamas">
+      <h2>{{ chama.name }}</h2>
+      <p class="chama-desc">
+        {{ chama.description || "No description available." }}
+      </p>
+      <button class="enter-btn" (click)="enterChama(chama)">Enter ➡️</button>
+    </div>
+  </div>
+
+  <!-- 🪄 Empty State -->
+  <div *ngIf="!loading && filteredChamas.length === 0" class="empty-state">
+    <img src="assets/empty-state.svg" alt="No chamas" />
+    <h3>No Chamas Found</h3>
+    <p>Try adjusting your search or join a new chama 🚀</p>
+  </div>
+
+  <!-- 🔑 Join Section -->
   <div class="join-section">
-    <h3>Join a Chama</h3>
-    <!-- ✅ ngModel binding stays fine (string type expected for joinCode) -->
-    <input [(ngModel)]="joinCode" placeholder="Enter Join Code" />
-    <button (click)="joinChama()">Join</button>
+    <h2>🔑 Join a New Chama</h2>
+    <p>Enter the join code you received from the chama admin to become a member.</p>
+
+    <div class="join-form">
+      <input
+        [(ngModel)]="joinCode"
+        placeholder="Enter Join Code"
+        class="join-input"
+      />
+      <button class="join-btn" (click)="joinChama()">Join Now</button>
+    </div>
   </div>
 </div>

@@ -3,7 +3,13 @@
     <h2>Login</h2>
     <p>Enter your credentials to access your account.</p>
 
+    <!-- Success/Error Message -->
+    <div *ngIf="loginMessage" [ngClass]="{'success-msg': loginSuccess, 'error-msg': !loginSuccess}">
+      {{ loginMessage }}
+    </div>
+
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <!-- Username / Email -->
       <div class="form-group">
         <label for="usernameOrEmail">Username or Email</label>
         <input 
@@ -17,21 +23,38 @@
           Username or Email is required
         </small>
       </div>
-      <div class="form-group">
+
+      <!-- Password with toggle -->
+      <div class="form-group password-group">
         <label for="password">Password</label>
-        <input 
-          id="password" 
-          type="password" 
-          placeholder="Enter your password"
-          formControlName="password"
-          required
-        />
+        <div class="password-input-wrapper">
+          <input 
+            id="password" 
+            [type]="showPassword ? 'text' : 'password'" 
+            placeholder="Enter your password"
+            formControlName="password"
+            required
+          />
+          <button type="button" class="show-pass-btn" (click)="showPassword = !showPassword">
+            {{ showPassword ? 'Hide' : 'Show' }}
+          </button>
+        </div>
         <small *ngIf="loginForm.controls['password'].invalid && loginForm.controls['password'].touched" class="error">
           Password must be at least 6 characters
         </small>
       </div>
-      <button type="submit" class="btn-login" [disabled]="loginForm.invalid">Login</button>
+
+      <!-- Forgot Password -->
+      <a class="forgot-password" routerLink="/forgot-password">Forgot Password?</a>
+
+      <!-- Submit Button -->
+      <button type="submit" class="btn-login" [disabled]="loginForm.invalid || loading">
+        <span *ngIf="loading" class="spinner"></span>
+        Login
+      </button>
     </form>
+
+    <!-- Signup Link -->
     <div class="links">
       <a routerLink="/signup" class="signup-link">Don't have an account? <strong>Sign Up</strong></a>
     </div>

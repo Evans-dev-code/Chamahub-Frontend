@@ -1,79 +1,190 @@
 .loan-approval-container {
-  padding: 20px;
-  max-width: 800px;
+  padding: 24px;
+  max-width: 1200px;
   margin: 0 auto;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
   h2 {
-    text-align: center;
-    font-size: 2rem;
+    margin-bottom: 24px;
     color: #333;
-    margin-bottom: 20px;
+    font-weight: 600;
+  }
+
+  /* ✅ Chama Selector */
+  .chama-selector {
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    label {
+      font-weight: 500;
+      color: #444;
+    }
+
+    .chama-dropdown {
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: border-color 0.2s ease;
+
+      &:hover,
+      &:focus {
+        border-color: #667eea;
+        outline: none;
+      }
+    }
+  }
+
+  /* ✅ Loading / Error / Empty States */
+  .loading,
+  .error,
+  .empty {
+    text-align: center;
+    margin: 24px 0;
+    font-size: 15px;
+  }
+
+  .loading {
+    color: #667eea;
+    font-weight: 500;
   }
 
   .error {
-    color: red;
-    margin-bottom: 15px;
-    text-align: center;
+    color: #dc3545;
+    font-weight: 500;
   }
 
+  .empty {
+    color: #6c757d;
+    font-style: italic;
+  }
+
+  /* ✅ Application Cards */
   .app-card {
-    background-color: #fff;
+    background: #f8f9fa;
+    border-radius: 12px;
     padding: 20px;
-    margin-bottom: 15px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    border: 1px solid #e0e0e0;
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+    }
 
     h3 {
-      font-size: 1.25rem;
+      margin-top: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 18px;
+      font-weight: 600;
       color: #333;
-      margin-bottom: 10px;
     }
 
     p {
-      font-size: 1rem;
+      margin: 6px 0;
       color: #555;
-      margin: 5px 0;
 
       strong {
-        font-weight: bold;
+        color: #333;
       }
     }
 
+    /* ✅ Status Tag */
+    .status-tag {
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: white;
+      text-transform: uppercase;
+
+      &.approved {
+        background: #28a745;
+      }
+      &.rejected {
+        background: #dc3545;
+      }
+      &.pending {
+        background: #ffc107;
+        color: #000;
+      }
+    }
+
+    /* ✅ Action Buttons */
     .action-buttons {
-      margin-top: 15px;
+      margin-top: 16px;
+      display: flex;
+      gap: 12px;
 
       button {
-        padding: 10px 15px;
-        margin-right: 10px;
-        font-size: 1rem;
+        padding: 8px 16px;
         border: none;
+        border-radius: 6px;
+        font-size: 14px;
         cursor: pointer;
-        border-radius: 5px;
-        transition: background-color 0.3s;
+        transition: background 0.3s ease;
+        font-weight: 500;
+      }
 
-        &.approve-btn {
-          background-color: #4caf50;
-          color: white;
-        }
-
-        &.reject-btn {
-          background-color: #f44336;
-          color: white;
-        }
+      .approve-btn {
+        background: #28a745;
+        color: white;
 
         &:hover {
-          opacity: 0.9;
-        }
-
-        &:disabled {
-          background-color: #ccc;
-          cursor: not-allowed;
+          background: #218838;
         }
       }
+
+      .reject-btn {
+        background: #dc3545;
+        color: white;
+
+        &:hover {
+          background: #b02a37;
+        }
+      }
+    }
+  }
+
+  /* ✅ Mobile Responsiveness */
+  @media (max-width: 768px) {
+    padding: 16px;
+
+    h2 {
+      text-align: center;
+    }
+
+    .chama-selector {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+
+      .chama-dropdown {
+        width: 100%;
+      }
+    }
+
+    .app-card {
+      padding: 16px;
+    }
+  }
+
+  /* ✅ Print Styles */
+  @media print {
+    .chama-selector,
+    .action-buttons {
+      display: none;
+    }
+
+    .app-card {
+      background: #fff !important;
+      border: 1px solid #ccc !important;
+      box-shadow: none !important;
     }
   }
 }

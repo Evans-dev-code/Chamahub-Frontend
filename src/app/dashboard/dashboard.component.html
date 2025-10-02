@@ -3,55 +3,31 @@
     <h1>ChamaHub💰 Admin Dashboard</h1>
   </div>
 
-  <div *ngIf="error" class="error-message">{{ error }}</div>
+  <!-- 🔽 Error -->
+  <div *ngIf="error" class="alert error-message">{{ error }}</div>
 
+  <!-- 🔽 Dashboard Content -->
   <div *ngIf="!error">
-    <!-- Stats -->
+    <!-- Stats Grid -->
     <div class="stats">
-      <div class="stat-box">
-        <h3>Total Members</h3>
-        <p>{{ totalMembers }}</p>
-      </div>
-
-      <div class="stat-box">
-        <h3>Active Loans</h3>
-        <p>{{ activeLoans }}</p>
-      </div>
-
-      <div class="stat-box">
-        <h3>Total Loan Value</h3>
-        <p>${{ totalLoanValue | number:'1.0-0' }}</p>
-      </div>
-
-      <div class="stat-box">
-        <h3>Outstanding Balance</h3>
-        <p>${{ outstandingBalance | number:'1.0-0' }}</p>
-      </div>
-
-      <div class="stat-box">
-        <h3>Total Repayment Made</h3>
-        <p>${{ totalRepayment | number:'1.0-0' }}</p>
-      </div>
-
-      <div class="stat-box">
-        <h3>Total Value Given</h3>
-        <p>${{ totalValueGiven | number:'1.0-0' }}</p>
-      </div>
-
-      <div class="stat-box">
-        <h3>Total Repayment Expected</h3>
-        <p>${{ totalRepaymentExpected | number:'1.0-0' }}</p>
-      </div>
-
-      <div class="stat-box">
-        <h3>Total Profit</h3>
-        <p>${{ totalProfit | number:'1.0-0' }}</p>
+      <div class="stat-box" *ngFor="let stat of [
+          { label: 'Total Members', value: totalMembers },
+          { label: 'Active Loans', value: activeLoans },
+          { label: 'Total Loan Value', value: '$' + (totalLoanValue | number:'1.0-0') },
+          { label: 'Outstanding Balance', value: '$' + (outstandingBalance | number:'1.0-0') },
+          { label: 'Total Repayment Made', value: '$' + (totalRepayment | number:'1.0-0') },
+          { label: 'Total Value Given', value: '$' + (totalValueGiven | number:'1.0-0') },
+          { label: 'Total Repayment Expected', value: '$' + (totalRepaymentExpected | number:'1.0-0') },
+          { label: 'Total Profit', value: '$' + (totalProfit | number:'1.0-0') }
+        ]">
+        <h3>{{ stat.label }}</h3>
+        <p>{{ stat.value }}</p>
       </div>
     </div>
 
     <!-- Loan stats -->
-    <div class="loan-stats">
-      <h2>Loan Stats by Type</h2>
+    <div class="loan-stats card">
+      <h2>📊 Loan Stats by Type</h2>
       <table>
         <thead>
           <tr>
@@ -73,11 +49,12 @@
     </div>
 
     <!-- Recent transactions -->
-    <div class="recent-transactions">
-      <h2>Recent Transactions</h2>
+    <div class="recent-transactions card">
+      <h2>💵 Recent Transactions</h2>
+      <div *ngIf="transactions.length === 0" class="empty">No recent transactions.</div>
       <div *ngFor="let transaction of transactions" class="transaction">
         <p><strong>Loan Amount:</strong> ${{ transaction.amount | number:'1.0-0' }}</p>
-        <p><strong>Status:</strong> {{ transaction.status }}</p>
+        <p><strong>Status:</strong> <span class="status-tag">{{ transaction.status }}</span></p>
         <p><strong>Loan Type:</strong> {{ transaction.loanType }}</p>
         <p><strong>Interest Rate:</strong> {{ transaction.interestRate }}%</p>
         <p><strong>Total Repayment:</strong> ${{ transaction.totalRepayment || 0 | number:'1.0-0' }}</p>

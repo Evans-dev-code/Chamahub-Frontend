@@ -12,6 +12,10 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class LoginComponent {
   loginForm: FormGroup;
   errorMessage: string = '';
+  loginMessage: string = ''; // For success/error message display
+  loginSuccess: boolean = false; // True if login succeeded
+  showPassword: boolean = false; // Toggle password visibility
+  loading: boolean = false; // Show spinner during login
 
   constructor(
     private fb: FormBuilder,
@@ -19,13 +23,17 @@ export class LoginComponent {
     private authService: AuthService
   ) {
     this.loginForm = this.fb.group({
-      usernameOrEmail: ['', [Validators.required]], 
+      usernameOrEmail: ['', [Validators.required]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
 
   onSubmit(): void {
     if (this.loginForm.valid) {
+      this.loading = true; // Start loading
+      this.loginMessage = '';
+      this.errorMessage = '';
+
       const loginData = {
         identifier: this.loginForm.value.usernameOrEmail,
         password: this.loginForm.value.password
@@ -36,13 +44,17 @@ export class LoginComponent {
       this.authService.login(loginData).subscribe({
         next: (res) => {
           console.log('🔁 Full login response:', res);
+          this.loading = false;
 
           const token = res.token || null;
-          const role = (res.role || 'user').toLowerCase(); 
+          const role = (res.role || 'user').toLowerCase();
 
           if (token) {
             this.authService.setAuthToken(token);
             this.authService.setRole(role);
+
+            this.loginSuccess = true;
+            this.loginMessage = 'Login successful! Redirecting...';
 
             setTimeout(() => {
               if (role === 'admin') {
@@ -55,15 +67,18 @@ export class LoginComponent {
                 console.warn('⚠️ Unknown role:', role);
                 this.router.navigate(['/login']);
               }
-            }, 100);
+            }, 1000); // Short delay to show message
           } else {
             console.error('❌ No token received in response!');
-            this.errorMessage = 'Login failed: no token received.';
+            this.loginSuccess = false;
+            this.loginMessage = 'Login failed: no token received.';
           }
         },
         error: (err: HttpErrorResponse) => {
           console.error('❌ Login error:', err);
-          this.errorMessage = err.error?.message || 'Invalid credentials. Please try again.';
+          this.loading = false;
+          this.loginSuccess = false;
+          this.loginMessage = err.error?.message || 'Invalid credentials. Please try again.';
         }
       });
     }

@@ -1,119 +1,159 @@
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: 'Poppins', sans-serif;
-  background: #ffffff; 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
 .signup-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
-}
-.signup-box {
-  background-color: #ffffff;
-  padding: 40px 35px;
-  border-radius: 15px;
-  box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  width: 100%;
-  max-width: 450px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease-in-out;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  padding: 20px;
 
-  &:hover {
-    transform: scale(1.02);
-  }
-}
-h2 {
-  font-size: 28px;
-  font-weight: 700;
-  color: #000000; 
-  margin-bottom: 10px;
-}
-
-p {
-  font-size: 14px;
-  color: #555; 
-  margin-bottom: 20px;
-}
-.form-group {
-  text-align: left;
-  margin-bottom: 20px;
-
-  label {
-    font-weight: 600;
-    color: #000000;
-    display: block;
-    margin-bottom: 5px;
-  }
-
-  input {
+  .signup-box {
+    background: #fff;
+    padding: 40px 32px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
     width: 100%;
-    padding: 12px;
-    border: 1px solid #007bff; 
-    border-radius: 10px;
-    font-size: 16px;
-    background: #f0f8ff; 
-    color: #000000;
-    transition: all 0.3s ease-in-out;
+    max-width: 480px;
+    text-align: center;
+    position: relative;
 
-    &::placeholder {
-      color: rgba(0, 0, 0, 0.5); 
+    h2 { color: #333; font-weight: 700; font-size: 24px; margin-bottom: 8px; }
+    p { color: #555; font-size: 14px; margin-bottom: 20px; }
+
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 24px;
+
+      .tooltiptext {
+        visibility: hidden;
+        width: 260px;
+        background-color: #333;
+        color: #fff;
+        text-align: left;
+        border-radius: 6px;
+        padding: 8px;
+        position: absolute;
+        z-index: 1;
+        bottom: 125%;
+        left: 50%;
+        margin-left: -130px;
+        opacity: 0;
+        transition: opacity 0.3s;
+        font-size: 12px;
+      }
+      &:hover .tooltiptext { visibility: visible; opacity: 1; }
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+        position: relative;
+
+        input {
+          width: 100%;
+          padding: 10px 14px;
+          border: 1px solid #ccc;
+          border-radius: 8px;
+          font-size: 14px;
+          transition: all 0.3s ease;
+
+          &:focus {
+            border-color: #667eea;
+            outline: none;
+            box-shadow: 0 0 6px rgba(102, 126, 234, 0.3);
+          }
+        }
+
+        .show-password {
+          position: absolute;
+          right: 12px;
+          top: 50%;
+          transform: translateY(-50%);
+          background: none;
+          border: none;
+          color: #667eea;
+          cursor: pointer;
+          font-weight: 600;
+          font-size: 12px;
+        }
+
+        .error { color: #dc3545; font-size: 12px; margin-top: 4px; }
+
+        .password-strength {
+          width: 100%;
+          height: 6px;
+          border-radius: 4px;
+          background: #e0e0e0;
+          margin-top: -4px;
+          margin-bottom: 8px;
+          overflow: hidden;
+
+          .strength-bar {
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 4px;
+          }
+          &.weak .strength-bar { background: #dc3545; }
+          &.fair .strength-bar { background: #ff9900; }
+          &.good .strength-bar { background: #2d9cdb; }
+          &.strong .strength-bar { background: #28a745; }
+        }
+      }
+
+      .btn-signup {
+        margin-top: 12px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: #fff;
+        padding: 12px 16px;
+        border: none;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background: linear-gradient(135deg, #5563c1, #633b91);
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+
+        &:disabled {
+          background: #b0b3b8;
+          cursor: not-allowed;
+          box-shadow: none;
+        }
+      }
+    }
+
+    .login-link { margin-top: 16px; font-size: 14px; color: #555;
+      a { color: #667eea; font-weight: 600; text-decoration: none; &:hover { text-decoration: underline; } }
+    }
+
+    .extra-info {
+      margin-top: 24px;
+      text-align: left;
+      font-size: 13px;
+      color: #555;
+      ul { list-style: disc; padding-left: 20px; li { margin-bottom: 6px; } }
     }
   }
-  span {
-    background: rgba(231, 76, 60, 0.3);
-    padding: 5px 10px;
-    border-radius: 5px;
-    color: white;
-    font-size: 12px;
-    margin-top: 5px;
-    display: block;
-    font-weight: bold;
-  }
 }
-.btn-signup {
-  background: #007bff;
-  color: white;
-  width: 100%;
-  padding: 14px;
-  border-radius: 10px;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-  text-transform: uppercase;
-  font-weight: bold;
-  transition: all 0.3s ease-in-out;
 
-  &:hover {
-    background: #0056b3;
-    transform: scale(1.05);
-    box-shadow: 0px 4px 15px rgba(0, 123, 255, 0.6);
-  }
-}
-.links {
-  margin-top: 15px;
-
-  .login-link {
-    display: block;
-    color: #007bff;
-    font-weight: 600;
-    text-decoration: none;
-    margin-top: 10px;
-
-    &:hover {
-      text-decoration: underline;
-      color: #0056b3;
-    }
+@media (max-width: 500px) {
+  .signup-box {
+    padding: 32px 20px;
+    .tooltip .tooltiptext { width: 220px; margin-left: -110px; }
   }
 }

@@ -12,8 +12,13 @@ import { ChamaService, Chama } from '../services/chama.service';
 export class UserManagementComponent implements OnInit {
   users: User[] = [];
   chamas: Chama[] = [];
-  selectedChamaId: number = 0; // default to 0
+  selectedChamaId: number = 0;
   addUserForm: FormGroup;
+
+  // ✅ UI states
+  loading: boolean = false;
+  error: string | null = null;
+  success: string | null = null;
 
   get isAdmin(): boolean {
     return this.auth.isAdmin();
@@ -45,13 +50,27 @@ export class UserManagementComponent implements OnInit {
 
   loadUsers(): void {
     if (!this.selectedChamaId) return;
+
+    this.loading = true;
+    this.error = null;
+
     this.userService.getPendingUsers(this.selectedChamaId).subscribe({
-      next: (data: User[]) => (this.users = data),
-      error: (err: any) => console.error('Failed to load users:', err)
+      next: (data: User[]) => {
+        this.users = data;
+        this.loading = false;
+      },
+      error: (err: any) => {
+        console.error('Failed to load users:', err);
+        this.error = 'Failed to load users';
+        this.loading = false;
+      }
     });
   }
 
   loadChamas(): void {
+    this.loading = true;
+    this.error = null;
+
     this.chamaService.getMyChamas().subscribe({
       next: (data: Chama[]) => {
         this.chamas = data;
@@ -59,30 +78,50 @@ export class UserManagementComponent implements OnInit {
           this.selectedChamaId = this.chamas[0].id;
           this.loadUsers();
         }
+        this.loading = false;
       },
-      error: (err: any) => console.error('Failed to load chamas:', err)
+      error: (err: any) => {
+        console.error('Failed to load chamas:', err);
+        this.error = 'Failed to load chamas';
+        this.loading = false;
+      }
     });
   }
 
   onApprove(user: User): void {
     if (!this.selectedChamaId) return;
-    this.userService.approveUser(user.id, this.selectedChamaId).subscribe(() =>
-      this.loadUsers()
-    );
+
+    this.userService.approveUser(user.id, this.selectedChamaId).subscribe({
+      next: () => {
+        this.success = `✅ ${user.fullName} approved successfully`;
+        this.loadUsers();
+      },
+      error: () => (this.error = 'Failed to approve user')
+    });
   }
 
   onReject(user: User): void {
     if (!this.selectedChamaId) return;
-    this.userService.rejectUser(user.id, this.selectedChamaId).subscribe(() =>
-      this.loadUsers()
-    );
+
+    this.userService.rejectUser(user.id, this.selectedChamaId).subscribe({
+      next: () => {
+        this.success = `❌ ${user.fullName} rejected`;
+        this.loadUsers();
+      },
+      error: () => (this.error = 'Failed to reject user')
+    });
   }
 
   onDelete(user: User): void {
     if (!this.selectedChamaId) return;
-    this.userService.deleteUser(user.id, this.selectedChamaId).subscribe(() =>
-      this.loadUsers()
-    );
+
+    this.userService.deleteUser(user.id, this.selectedChamaId).subscribe({
+      next: () => {
+        this.success = `🗑️ ${user.fullName} deleted`;
+        this.loadUsers();
+      },
+      error: () => (this.error = 'Failed to delete user')
+    });
   }
 
   onAddMember(): void {
@@ -103,8 +142,14 @@ export class UserManagementComponent implements OnInit {
           };
 
           this.userService.addMember(memberDTO).subscribe({
-            next: () => this.loadUsers(),
-            error: (err: any) => console.error('Member creation failed:', err)
+            next: () => {
+              this.success = `✅ ${newUser.fullName} added to chama(s) successfully`;
+              this.loadUsers();
+            },
+            error: (err: any) => {
+              console.error('Member creation failed:', err);
+              this.error = 'Failed to create member';
+            }
           });
         });
 
@@ -113,7 +158,10 @@ export class UserManagementComponent implements OnInit {
           chamaIds: []
         });
       },
-      error: (err: any) => console.error('User creation failed:', err)
+      error: (err: any) => {
+        console.error('User creation failed:', err);
+        this.error = 'Failed to create user';
+      }
     });
   }
 }

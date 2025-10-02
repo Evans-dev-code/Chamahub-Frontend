@@ -1,134 +1,183 @@
 .loan-container {
-  font-family: Arial, sans-serif;
-  max-width: 800px;
+  display: flex;
+  gap: 32px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
+  padding: 32px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  align-items: stretch; // Equal height for both columns
 
-.loan-container::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: 100vw;
-  background-image: url(https://static.vecteezy.com/system/resources/thumbnails/030/469/051/small/rear-view-of-businessman-looking-at-digital-interface-on-abstract-city-background-ai-generated-photo.jpg);
-  background-size: cover;
-  background-position: center;
-  opacity: 0.25;
-  z-index: -1;
-  pointer-events: none;
-}
+  // Left Side: Loan Info
+  .loan-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
 
-.loan-info {
-  padding: 20px;
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-}
+    h2 {
+      color: #333;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
 
-h2, h3 {
-  color: #296ee4;
-}
+    p {
+      color: #555;
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
 
-h2 {
-  text-align: center;
-  font-size: 24px;
-  margin-bottom: 20px;
-}
+    .loan-type-info {
+      margin-bottom: 16px;
+      padding: 16px;
+      background: #f8f9fa;
+      border-left: 4px solid #667eea;
+      border-radius: 8px;
+      transition: all 0.3s ease;
 
-h3 {
-  font-size: 20px;
-  margin-bottom: 10px;
-}
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+      }
 
-p {
-  text-align: left;
-  font-size: 16px;
-  color: #000000;
-  margin-bottom: 10px;
-}
+      h3 {
+        margin: 0 0 8px;
+        font-size: 16px;
+        color: #667eea;
+        font-weight: 600;
+      }
 
-.loan-type-info {
-  margin-bottom: 20px;
-}
+      p {
+        font-size: 14px;
+        margin: 0;
+        color: #444;
+      }
+    }
 
-.form-group {
-  margin-bottom: 15px;
+    .loan-additional-info {
+      background: #f0f4ff;
+      padding: 16px;
+      border-radius: 8px;
 
-  label {
-    font-size: 14px;
-    font-weight: bold;
-    color: #327ee9;
-    margin-bottom: 5px;
-    display: inline-block;
-  }
+      h3 {
+        font-size: 15px;
+        color: #667eea;
+        margin-bottom: 8px;
+      }
 
-  input, select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
-    color: #333;
-    background-color: #fff;
-    transition: border-color 0.3s ease;
+      ul {
+        padding-left: 20px;
+        margin-bottom: 12px;
 
-    &:focus {
-      border-color: #007bff;
-      outline: none;
+        li {
+          font-size: 14px;
+          margin-bottom: 4px;
+          color: #444;
+        }
+      }
+
+      p {
+        font-size: 14px;
+        color: #444;
+      }
     }
   }
 
-  small.error {
-    color: #e74c3c;
-    font-size: 12px;
-    display: block;
-    margin-top: 5px;
-  }
-}
+  // Right Side: Loan Form
+  form {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
+    background: #f9faff;
+    border-radius: 12px;
+    border: 1px solid #e0e0e0;
 
-button {
-  width: 100%;
-  padding: 12px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+    h2 {
+      color: #333;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 16px;
+    }
 
-  &:hover {
-    background-color: #0056b3;
-  }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
 
-  &:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
-}
+      label {
+        font-size: 14px;
+        font-weight: 500;
+        color: #333;
+      }
 
-.back-btn {
-  text-align: center;
-  margin-top: 20px;
+      input,
+      select {
+        padding: 10px 12px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: border 0.3s ease;
 
-  button {
-    background-color: #6c757d;
-    color: white;
-    padding: 8px 2px;
-    border: none;
-    border-radius: 8px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+        &:focus {
+          border-color: #667eea;
+          outline: none;
+        }
+      }
+    }
 
-    &:hover {
-      background-color: #5a6268;
+    button[type="submit"] {
+      margin-top: 12px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fff;
+      padding: 12px 16px;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: linear-gradient(135deg, #5563c1, #633b91);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+      }
+    }
+
+    .back-btn {
+      margin-top: 8px;
+
+      button {
+        width: 100%;
+        background: #f1f3f5;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 10px 16px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background: #e9ecef;
+        }
+      }
     }
   }
 }
 
+// Responsive
+@media (max-width: 900px) {
+  .loan-container {
+    flex-direction: column;
+    padding: 20px;
+
+    .loan-info,
+    form {
+      flex: unset;
+    }
+  }
+}

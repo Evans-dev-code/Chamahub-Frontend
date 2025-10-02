@@ -1,49 +1,119 @@
 <div class="dashboard-container">
+  <!-- Sidebar -->
   <nav class="sidebar">
     <h2 class="logo">ChamaHub💰</h2>
     <ul class="nav-links">
-      <li><a routerLink="/user-dashboard">Home</a></li>
-      <li><a href="#" (click)="openModal($event)">Loan Calculator</a></li>
-      <li><a routerLink="/user-contributions">My Contributions</a></li>
-      <li><a routerLink="/loan-application">Apply for Loan</a></li>
-      <li><a routerLink="/view-loan-status">View Loan Status</a></li>
-      <li><a routerLink="/user-loan-payment">Loan Payment</a></li>
+      <li>
+        <a routerLink="/user-dashboard" routerLinkActive="active">🏠 Home</a>
+      </li>
+      <li>
+        <a href="#" (click)="openModal($event)">📊 Loan Calculator</a>
+      </li>
+      <li>
+        <a routerLink="/user-contributions" routerLinkActive="active">💰 My Contributions</a>
+      </li>
+      <li>
+        <a routerLink="/loan-application" routerLinkActive="active">📝 Apply for Loan</a>
+      </li>
+      <li>
+        <a routerLink="/view-loan-status" routerLinkActive="active">📄 View Loan Status</a>
+      </li>
+      <li>
+        <a routerLink="/user-loan-payment" routerLinkActive="active">💵 Loan Payment</a>
+      </li>
     </ul>
-    <button class="logout-btn" (click)="logout()">Logout</button>
+    <button class="logout-btn" (click)="logout()">🚪 Logout</button>
   </nav>
 
+  <!-- Main Content -->
   <div class="main-content">
+    <!-- Hero -->
     <section class="hero">
-      <h1>Welcome to ChamaHub💰</h1>
-      <p>Your trusted partner for financial solutions. Explore our loan options and take control of your future.</p>
+      <h1>Welcome to <span>ChamaHub💰</span></h1>
+      <p>
+        Empowering chama members through savings, loans, and community growth.
+        Manage your contributions, apply for loans, and build financial freedom together.
+      </p>
     </section>
 
-    <section class="financial-education">
-      <h2>Financial Insights</h2>
-      <div class="educational-content">
-        <!-- ... existing content ... -->
+    <!-- ✅ Quick Stats Section -->
+    <section class="quick-stats">
+      <div class="stat-card">
+        <h3>💰 Total Contributions</h3>
+        <p>{{ totalContributions | currency:'KES' }}</p>
+      </div>
+      <div class="stat-card">
+        <h3>💵 Active Loans</h3>
+        <p>{{ activeLoans }}</p>
+      </div>
+      <div class="stat-card">
+        <h3>📅 Next Due Date</h3>
+        <p>{{ nextDueDate | date:'mediumDate' }}</p>
+      </div>
+      <div class="stat-card">
+        <h3>📈 Group Balance</h3>
+        <p>{{ chamaBalance | currency:'KES' }}</p>
       </div>
     </section>
 
-    <!-- ✅ Loan Calculator Modal -->
-    <div class="modal-overlay" [class.show]="isModalOpen" (click)="closeModal()">
+    <!-- Financial Insights -->
+    <section class="financial-education">
+      <h2>📚 Chama Insights</h2>
+      <div class="cards">
+        <div class="card">
+          <h3>🌱 Save Together</h3>
+          <p>Grow your chama savings and achieve financial security as a team.</p>
+        </div>
+        <div class="card">
+          <h3>🤝 Access Loans</h3>
+          <p>Apply for affordable chama-backed loans with flexible repayment terms.</p>
+        </div>
+        <div class="card">
+          <h3>📈 Build Wealth</h3>
+          <p>Invest as a chama and increase your collective financial strength.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Loan Calculator Modal -->
+    <div
+      class="modal-overlay"
+      [class.show]="isModalOpen"
+      (click)="closeModal()"
+    >
       <div class="modal-content" (click)="$event.stopPropagation()">
-        <h2>Loan Calculator</h2>
+        <h2>📊 Loan Calculator</h2>
         <div class="calculator-box">
-          <label>Loan Amount ($):</label>
-          <!-- ✅ Explicitly type these as numbers in TS -->
-          <input type="number" [(ngModel)]="loanAmount" placeholder="Enter amount" />
+          <label>Loan Amount (KES):</label>
+          <input
+            type="number"
+            [(ngModel)]="loanAmount"
+            placeholder="Enter amount"
+          />
 
           <label>Interest Rate (%):</label>
-          <input type="number" [(ngModel)]="interestRate" placeholder="Enter rate" />
+          <input
+            type="number"
+            [(ngModel)]="interestRate"
+            placeholder="Enter rate"
+          />
 
-          <label>Loan Term (Years):</label>
-          <input type="number" [(ngModel)]="loanTerm" placeholder="Enter term" />
+          <label>Loan Term (Months):</label>
+          <input
+            type="number"
+            [(ngModel)]="loanTerm"
+            placeholder="Enter term"
+          />
 
-          <button (click)="calculateLoan()">Calculate</button>
+          <button class="calculate-btn" (click)="calculateLoan()">
+            Calculate
+          </button>
 
-          <div *ngIf="monthlyPayment !== null">
-            <h3>Estimated Monthly Payment: ${{ monthlyPayment | number:'1.2-2' }}</h3>
+          <div *ngIf="monthlyPayment !== null" class="result-box">
+            <h3>
+              Estimated Monthly Payment:
+              <span>KES {{ monthlyPayment | number : '1.2-2' }}</span>
+            </h3>
           </div>
 
           <button class="close-btn" (click)="closeModal()">Close</button>

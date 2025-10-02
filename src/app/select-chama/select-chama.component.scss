@@ -1,114 +1,232 @@
 .select-chama-container {
-  max-width: 600px;
-  margin: 40px auto;
-  padding: 30px;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: #2e3b55;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  font-family: 'Inter', sans-serif;
+  color: #2c3e50;
 
-  h2 {
-    text-align: center;
-    font-size: 28px;
-    margin-bottom: 20px;
-    font-weight: bold;
-  }
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
 
-  .logout-btn {
-    background-color: #ff4d4d;
-    border: none;
-    color: #fff;
-    padding: 10px 18px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-    margin-bottom: 20px;
-    float: right;
-    transition: background-color 0.3s ease;
+    h1 {
+      font-size: 2rem;
+      font-weight: 600;
+      color: #007bff;
+    }
 
-    &:hover {
-      background-color: #e60000;
+    .logout-btn {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s;
+
+      &:hover {
+        background: #b02a37;
+      }
     }
   }
 
+  .loading,
   .error {
-    color: #ff4d4d;
-    margin: 10px 0;
     text-align: center;
-    font-weight: bold;
+    margin: 20px 0;
+    font-size: 1.1rem;
   }
 
-  ul {
-    list-style: none;
-    padding: 0;
-    margin-bottom: 20px;
+  .error {
+    color: #dc3545;
+  }
 
-    li {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #f9f9f9;
-      padding: 12px 15px;
+  /* 🔍 Search & Filter */
+  .search-filter {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    .search-input {
+      flex: 1;
+      min-width: 220px;
+      padding: 10px 14px;
+      border: 1px solid #ccd6f6;
       border-radius: 6px;
-      margin-bottom: 10px;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+      font-size: 15px;
+      outline: none;
 
-      span {
-        font-size: 16px;
-        font-weight: 500;
+      &:focus {
+        border-color: #007bff;
+      }
+    }
+
+    .filter-select {
+      padding: 10px 14px;
+      border: 1px solid #ccd6f6;
+      border-radius: 6px;
+      font-size: 15px;
+      background: #fff;
+      min-width: 160px;
+      cursor: pointer;
+
+      &:focus {
+        border-color: #007bff;
+      }
+    }
+  }
+
+  /* 📊 Chama Grid */
+  .chama-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+
+    .chama-card {
+      background: #ffffff;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      text-align: center;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
       }
 
-      button {
-        background-color: #007bff;
-        border: none;
+      h2 {
+        margin-bottom: 8px;
+        font-size: 1.4rem;
+        color: #333;
+      }
+
+      .chama-desc {
+        font-size: 0.95rem;
+        color: #6c757d;
+        margin-bottom: 16px;
+      }
+
+      .enter-btn {
+        background: #007bff;
         color: white;
-        padding: 8px 14px;
+        border: none;
+        padding: 10px 18px;
         border-radius: 6px;
         cursor: pointer;
-        font-weight: bold;
-        transition: background-color 0.3s ease;
+        transition: background 0.2s;
 
         &:hover {
-          background-color: #0056b3;
+          background: #0056b3;
         }
       }
     }
   }
 
-  .join-section {
-    margin-top: 30px;
+  /* 🪄 Empty State */
+  .empty-state {
     text-align: center;
+    margin: 60px 0;
+
+    img {
+      width: 220px;
+      margin-bottom: 20px;
+      opacity: 0.85;
+    }
 
     h3 {
-      margin-bottom: 15px;
-      font-size: 20px;
-      font-weight: bold;
-      color: #2e3b55;
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+      color: #333;
     }
 
-    input {
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      width: 70%;
-      max-width: 300px;
-      margin-right: 10px;
-      font-size: 14px;
+    p {
+      font-size: 1rem;
+      color: #6c757d;
+    }
+  }
+
+  /* 🔑 Join Section */
+  .join-section {
+    margin-top: 50px;
+    padding: 30px;
+    background: linear-gradient(135deg, #f8faff, #eef4ff);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    text-align: center;
+
+    h2 {
+      font-size: 1.6rem;
+      color: #0056b3;
+      margin-bottom: 8px;
     }
 
-    button {
-      background-color: #2e3b55;
-      color: #fff;
-      border: none;
-      padding: 10px 16px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: background-color 0.3s ease;
+    p {
+      color: #6c757d;
+      margin-bottom: 20px;
+      font-size: 0.95rem;
+    }
 
-      &:hover {
-        background-color: #44577b;
+    .join-form {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+
+      .join-input {
+        padding: 10px 16px;
+        width: 250px;
+        border: 1px solid #ccd6f6;
+        border-radius: 6px;
+        font-size: 15px;
+        outline: none;
+        transition: border 0.2s;
+
+        &:focus {
+          border-color: #007bff;
+        }
+      }
+
+      .join-btn {
+        background: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 22px;
+        border-radius: 6px;
+        font-size: 15px;
+        cursor: pointer;
+        transition: background 0.2s;
+
+        &:hover {
+          background: #218838;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 600px) {
+    .header {
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .search-filter {
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .join-form {
+      flex-direction: column;
+      width: 100%;
+
+      .join-input {
+        width: 100%;
       }
     }
   }

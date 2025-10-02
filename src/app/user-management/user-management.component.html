@@ -1,8 +1,12 @@
-<div *ngIf="isAdmin">
-  <h2>Pending Signups</h2>
+<div class="user-management-container" *ngIf="isAdmin">
+  <h2>User Management</h2>
+
+  <!-- 🔽 Feedback Messages -->
+  <div *ngIf="success" class="alert success">{{ success }}</div>
+  <div *ngIf="error" class="alert error">{{ error }}</div>
 
   <!-- 🔽 Chama Selector -->
-  <div *ngIf="chamas.length > 0">
+  <div class="chama-selector" *ngIf="chamas.length > 0">
     <label for="chamaSelect">Select Chama:</label>
     <select
       id="chamaSelect"
@@ -15,43 +19,76 @@
     </select>
   </div>
 
-  <table>
-    <tr *ngFor="let u of users">
-      <td>{{ u.fullName }}</td>
-      <td>{{ u.email }}</td>
-      <td>{{ u.role }}</td>
-      <td>{{ u.status }}</td>
-      <td *ngIf="u.status === 'PENDING'">
-        <button (click)="onApprove(u)">Approve</button>
-        <button (click)="onReject(u)">Reject</button>
-      </td>
-      <td *ngIf="u.status !== 'PENDING'">
-        <button (click)="onDelete(u)">Delete</button>
-      </td>
-    </tr>
-  </table>
+  <!-- ✅ Loading / Error / Empty States -->
+  <div *ngIf="loading" class="loading">⏳ Loading users...</div>
+  <div *ngIf="!loading && users.length === 0 && !error" class="empty">
+    No pending users found for this chama.
+  </div>
 
-  <h3>Add Member</h3>
-  <form [formGroup]="addUserForm" (ngSubmit)="onAddMember()">
-    <input formControlName="fullName" placeholder="Full name" />
-    <input formControlName="email" placeholder="Email" />
-    <input formControlName="username" placeholder="Username" />
-    <input formControlName="password" placeholder="Password" type="password" />
-    <select formControlName="role">
-      <option>User</option>
-      <option>Admin</option>
-    </select>
-    <input formControlName="phoneNumber" placeholder="Phone Number" />
-    <input formControlName="chamaRole" placeholder="Chama Role" />
+  <!-- ✅ Users Table -->
+  <div class="table-wrapper" *ngIf="!loading && users.length > 0">
+    <table class="users-table">
+      <thead>
+        <tr>
+          <th>Full Name</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Status</th>
+          <th class="actions-col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let u of users">
+          <td>{{ u.fullName }}</td>
+          <td>{{ u.email }}</td>
+          <td>{{ u.role }}</td>
+          <td>
+            <span class="status-tag" [ngClass]="u.status.toLowerCase()">
+              {{ u.status }}
+            </span>
+          </td>
+          <td>
+            <ng-container *ngIf="u.status === 'PENDING'; else nonPending">
+              <button class="approve-btn" (click)="onApprove(u)">Approve</button>
+              <button class="reject-btn" (click)="onReject(u)">Reject</button>
+            </ng-container>
+            <ng-template #nonPending>
+              <button class="delete-btn" (click)="onDelete(u)">Delete</button>
+            </ng-template>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
-    <!-- ✅ Multi select chama assignment -->
-    <label for="chamaSelectMulti">Assign to Chamas:</label>
-    <select id="chamaSelectMulti" formControlName="chamaIds" multiple>
-      <option *ngFor="let chama of chamas" [ngValue]="chama.id">
-        {{ chama.name }}
-      </option>
-    </select>
+  <!-- ✅ Add Member Form -->
+  <div class="add-member-section">
+    <h3>Add Member</h3>
+    <form [formGroup]="addUserForm" (ngSubmit)="onAddMember()" class="add-user-form">
+      <div class="form-grid">
+        <input formControlName="fullName" placeholder="Full Name" />
+        <input formControlName="email" placeholder="Email" type="email" />
+        <input formControlName="username" placeholder="Username" />
+        <input formControlName="password" placeholder="Password" type="password" />
+        <select formControlName="role">
+          <option>User</option>
+          <option>Admin</option>
+        </select>
+        <input formControlName="phoneNumber" placeholder="Phone Number" />
+        <input formControlName="chamaRole" placeholder="Chama Role" />
 
-    <button type="submit" [disabled]="addUserForm.invalid">Add Member</button>
-  </form>
+        <!-- ✅ Multi select chama assignment -->
+        <label for="chamaSelectMulti" class="multi-label">Assign to Chamas:</label>
+        <select id="chamaSelectMulti" formControlName="chamaIds" multiple>
+          <option *ngFor="let chama of chamas" [ngValue]="chama.id">
+            {{ chama.name }}
+          </option>
+        </select>
+      </div>
+
+      <button type="submit" class="submit-btn" [disabled]="addUserForm.invalid">
+        ➕ Add Member
+      </button>
+    </form>
+  </div>
 </div>

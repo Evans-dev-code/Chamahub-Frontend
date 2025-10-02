@@ -6,23 +6,40 @@
   width: 250px;
   background: linear-gradient(180deg, #007bff, #0056b3);
   color: white;
-  padding: 20px 15px;
   display: flex;
   flex-direction: column;
-  border-right: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.1);
-   z-index: 1000;
+  padding: 0;
+  border-right: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
 }
 
-.sidebar-logo {
-  font-size: 22px;
-  font-weight: bold;
-  color: white;
-  text-decoration: none;
-  margin-bottom: 25px;
-  display: block;
+.sidebar-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 20px 15px;
 }
 
+.sidebar-header {
+  margin-bottom: 20px;
+  text-align: center;
+
+  .sidebar-logo {
+    font-size: 22px;
+    font-weight: bold;
+    color: #fff;
+    text-decoration: none;
+    display: block;
+    letter-spacing: 1px;
+
+    &:hover {
+      color: #ffeb3b;
+    }
+  }
+}
+
+/* Active Chama Section */
 .active-chama {
   background: #f8f9fa;
   color: #333;
@@ -40,7 +57,7 @@
   }
 
   .chama-name {
-    font-size: 15px;
+    font-size: 16px;
     font-weight: bold;
     margin-bottom: 4px;
   }
@@ -50,80 +67,83 @@
     color: #555;
     margin-bottom: 8px;
   }
-}
 
-.no-chama {
-  background: #fff3cd;
-  border: 1px solid #ffeaa7;
-}
+  .switch-chama-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.2s ease;
 
-.switch-chama-btn {
-  background: #007bff;
-  color: white;
-  border: none;
-  padding: 6px 10px;
-  border-radius: 4px;
-  font-size: 12px;
-  cursor: pointer;
-  width: 100%;
-  transition: background 0.2s ease;
-
-  &:hover {
-    background: #0056b3;
+    &:hover {
+      background: #0056b3;
+    }
   }
 }
 
+/* Sidebar Links */
 .sidebar-links {
   list-style: none;
   padding-left: 0;
-  margin-top: 20px;
+  margin-top: 10px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  flex-grow: 1;
+  gap: 6px;
 
-  .nav-link {
-    color: white;
-    text-decoration: none;
-    padding: 10px 12px;
-    border-radius: 6px;
-    display: block;
-    transition: background-color 0.2s ease;
+  li {
+    .nav-link {
+      color: white;
+      text-decoration: none;
+      padding: 10px 14px;
+      border-radius: 6px;
+      display: block;
+      transition: background 0.2s ease, padding-left 0.2s ease;
 
-    &:hover {
-      background-color: rgba(255, 255, 255, 0.15);
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.15);
+        padding-left: 18px; /* small slide effect */
+      }
+
+      &.active {
+        background-color: rgba(255, 255, 255, 0.25);
+        font-weight: bold;
+      }
     }
 
-    &.active {
-      background-color: rgba(255, 255, 255, 0.25);
-      font-weight: bold;
-    }
-  }
+    .logout-link {
+      margin-top: auto;
+      background: #dc3545;
+      text-align: center;
 
-  .logout-link {
-    margin-top: auto;
-    background: #dc3545;
-    text-align: center;
-
-    &:hover {
-      background: #b02a37;
+      &:hover {
+        background: #b02a37;
+      }
     }
   }
 }
 
+/* Responsive */
 @media screen and (max-width: 768px) {
   .sidebar {
     width: 100%;
     height: auto;
     position: relative;
+  }
+
+  .sidebar-container {
     flex-direction: row;
     align-items: center;
-    padding: 10px;
+    justify-content: space-between;
   }
 
   .sidebar-links {
     flex-direction: row;
-    gap: 12px;
-    margin: 0;
+    gap: 10px;
   }
 
   .active-chama {

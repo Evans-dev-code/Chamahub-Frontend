@@ -1,111 +1,135 @@
-:host {
-  display: block;
-  padding: 1.5rem;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: #333;
-}
+.admin-loan-payment-container {
+  padding: 24px;
+  max-width: 1000px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 
-h3 {
-  font-size: 1.6rem;
-  font-weight: 600;
-  margin-bottom: 1.2rem;
-  color: #2c3e50;
-}
-
-h4 {
-  font-size: 1.2rem;
-  font-weight: 500;
-  margin: 1.2rem 0 0.6rem;
-  color: #34495e;
-}
-
-label {
-  font-weight: 500;
-  margin-right: 0.5rem;
-}
-
-select,
-input[type="number"] {
-  padding: 0.5rem 0.75rem;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  min-width: 220px;
-  font-size: 0.95rem;
-  transition: border-color 0.2s ease-in-out;
-
-  &:focus {
-    outline: none;
-    border-color: #2563eb;
-    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
-  }
-}
-
-button {
-  padding: 0.6rem 1.2rem;
-  border: none;
-  border-radius: 6px;
-  background-color: #2563eb;
-  color: white;
-  font-weight: 500;
-  cursor: pointer;
-  font-size: 0.95rem;
-  transition: background-color 0.2s ease;
-
-  &:hover {
-    background-color: #1d4ed8;
+  h3 {
+    margin-bottom: 20px;
+    font-size: 22px;
+    font-weight: 600;
+    color: #333;
   }
 
-  &:disabled {
-    background-color: #9ca3af;
-    cursor: not-allowed;
+  /* Messages */
+  .success-message {
+    background: #d4edda;
+    color: #155724;
+    padding: 10px 14px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    font-weight: 500;
   }
-}
 
-.table-auto {
-  border-collapse: collapse;
-  margin-top: 1rem;
-  width: 100%;
-  background-color: #fff;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  .error-message {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 10px 14px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    font-weight: 500;
+  }
 
-  th, td {
+  /* Dropdown */
+  select {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    width: 100%;
+    max-width: 400px;
+    font-size: 14px;
+  }
+
+  /* Table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+    background: #fafafa;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  th,
+  td {
+    border: 1px solid #ddd;
+    padding: 12px;
     text-align: left;
-    padding: 0.75rem 1rem;
+    font-size: 14px;
   }
 
   thead {
-    background-color: #f9fafb;
-    border-bottom: 2px solid #e5e7eb;
-
-    th {
-      font-weight: 600;
-      color: #374151;
-      font-size: 0.9rem;
-    }
+    background: #667eea;
+    color: white;
   }
 
-  tbody tr {
-    border-bottom: 1px solid #e5e7eb;
+  tbody tr:nth-child(even) {
+    background: #f8f9fa;
+  }
+
+  /* Inputs */
+  input[type='number'] {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-top: 8px;
+    width: 200px;
+  }
+
+  /* Buttons */
+  button {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    margin-right: 10px;
 
     &:hover {
-      background-color: #f3f4f6;
+      opacity: 0.9;
+      transform: translateY(-2px);
     }
   }
 
-  td {
-    font-size: 0.9rem;
-    color: #4b5563;
+  /* ✅ Green approve button */
+  .approve-btn {
+    background: #28a745;
+    color: white;
+
+    &:hover {
+      background: #218838;
+    }
   }
-}
 
-[style*="color: red;"] {
-  color: #dc2626 !important;
-  font-weight: 500;
-}
+  /* ✅ Red reject button */
+  .reject-btn {
+    background: #dc3545;
+    color: white;
 
-[style*="color: green;"] {
-  color: #16a34a !important;
-  font-weight: 500;
+    &:hover {
+      background: #c82333;
+    }
+  }
+
+  /* ✅ Default blue button (Pay Manually) */
+  button:not(.approve-btn):not(.reject-btn) {
+    background: #007bff;
+    color: white;
+
+    &:hover {
+      background: #0056b3;
+    }
+  }
+
+  /* Empty + Loading states */
+  .loading,
+  .empty {
+    margin-top: 16px;
+    color: #666;
+    font-style: italic;
+  }
 }

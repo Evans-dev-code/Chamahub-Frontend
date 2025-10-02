@@ -17,17 +17,23 @@ export interface LoginResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  private signupUrl = 'http://localhost:8080/api/auth/signup';
-  private loginUrl = 'http://localhost:8080/api/auth/login';
+  private baseUrl = 'http://localhost:8080/api/auth';
+  private signupUrl = `${this.baseUrl}/signup`;
+  private loginUrl = `${this.baseUrl}/login`;
+  private checkUsernameUrl = `${this.baseUrl}/check-username`;
+  private checkEmailUrl = `${this.baseUrl}/check-email`;
 
   private tokenKey = 'authToken';
   private roleKey = 'userRole';
   private userIdKey = 'userId';
-  private activeChamaKey = 'activeChamaId'; // 👈 clear this on logout too
+  private activeChamaKey = 'activeChamaId';
   private activeChamaNameKey = 'activeChamaName';
 
   constructor(private http: HttpClient) {}
 
+  // ==========================
+  // Auth Methods
+  // ==========================
   signup(userPayload: any): Observable<any> {
     return this.http.post(this.signupUrl, userPayload);
   }
@@ -38,7 +44,6 @@ export class AuthService {
         this.setAuthToken(response.token);
         this.setRole(response.role);
         localStorage.setItem(this.userIdKey, response.userId.toString());
-        // Active chama is not set here; user selects after login
       })
     );
   }
@@ -82,5 +87,16 @@ export class AuthService {
 
   getRole(): string | null {
     return localStorage.getItem(this.roleKey);
+  }
+
+  // ==========================
+  // Real-time availability checks
+  // ==========================
+  checkUsernameAvailability(username: string): Observable<{ available: boolean }> {
+    return this.http.get<{ available: boolean }>(`${this.checkUsernameUrl}/${username}`);
+  }
+
+  checkEmailAvailability(email: string): Observable<{ available: boolean }> {
+    return this.http.get<{ available: boolean }>(`${this.checkEmailUrl}/${email}`);
   }
 }

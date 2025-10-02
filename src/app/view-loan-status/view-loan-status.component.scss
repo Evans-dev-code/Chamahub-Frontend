@@ -1,94 +1,123 @@
 .container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background-color: #f0f2f5;
-  position: relative;
-  overflow: hidden;
-  padding: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 24px;
+
+  .loan-status-container {
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+
+    h2 {
+      text-align: center;
+      font-size: 24px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 24px;
+    }
+
+    .loading-message {
+      text-align: center;
+      font-size: 16px;
+      color: #666;
+      padding: 40px 0;
+    }
+
+    .applications-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 20px;
+
+      .application-item {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 20px;
+        border: 2px solid transparent;
+        transition: all 0.3s ease;
+
+        &:hover {
+          border-color: #667eea;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+        }
+
+        strong {
+          color: #333;
+        }
+
+        p, span {
+          margin: 4px 0;
+          color: #444;
+          font-size: 14px;
+        }
+
+        // Progress Bar
+        .progress {
+          background-color: #e9ecef;
+          border-radius: 12px;
+          overflow: hidden;
+          height: 20px;
+          margin-top: 12px;
+
+          .progress-bar {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            font-weight: 600;
+            text-align: center;
+            line-height: 20px;
+            transition: width 0.4s ease;
+          }
+        }
+      }
+    }
+
+    p {
+      text-align: center;
+      color: #666;
+      font-size: 16px;
+      margin-top: 20px;
+    }
+
+    .btn {
+      display: block;
+      margin: 24px auto 0;
+      padding: 12px 20px;
+      font-size: 15px;
+      font-weight: 600;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fff;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: linear-gradient(135deg, #5563c1, #633b91);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+      }
+    }
+  }
 }
 
-.loan-status-container {
-  background-color: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-  padding: 2rem 2.5rem;
-  max-width: 800px;
-  width: 100%;
-  position: relative;
-  z-index: 1;
-}
+// Responsive
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
 
-h2 {
-  font-size: 2rem;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
-  color: #222;
-}
+    .loan-status-container {
+      padding: 16px;
 
-.loading-message {
-  color: #666;
-  font-style: italic;
-  font-size: 1rem;
-}
+      .applications-list {
+        gap: 16px;
+      }
 
-.applications-list {
-  list-style: none;
-  padding: 0;
-  margin-top: 1rem;
-}
-
-.application-item {
-  background: #eaf4ff;
-  border-left: 6px solid #007bff;
-  padding: 1.25rem;
-  margin-bottom: 1.25rem;
-  border-radius: 12px;
-  font-size: 1rem;
-  line-height: 1.6;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-.back-btn {
-  display: inline-block;
-  background-color: #007bff;
-  color: white;
-  padding: 0.6rem 1.2rem;
-  border: none;
-  border-radius: 10px;
-  margin-top: 1.5rem;
-  cursor: pointer;
-  font-weight: 600;
-  transition: background-color 0.3s ease;
-}
-
-.back-btn:hover {
-  background-color: #0056b3;
-}
-
-.container::before,
-.container::after {
-  content: "";
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(80px);
-  z-index: 0;
-  opacity: 0.5;
-}
-
-.container::before {
-  width: 400px;
-  height: 400px;
-  background: rgba(0, 123, 255, 0.3);
-  top: -100px;
-  left: -100px;
-}
-
-.container::after {
-  width: 300px;
-  height: 300px;
-  background: rgba(0, 200, 83, 0.2);
-  bottom: -80px;
-  right: -80px;
+      .application-item {
+        padding: 16px;
+      }
+    }
+  }
 }
