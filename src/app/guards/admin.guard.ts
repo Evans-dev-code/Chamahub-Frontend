@@ -9,28 +9,25 @@ export class AdminGuard implements CanActivate {
 
   constructor(private authService: AuthService, private router: Router) {}
 
-  canActivate(
-  next: ActivatedRouteSnapshot,
-  state: RouterStateSnapshot
-): boolean {
-  const role = this.authService.getRole()?.toLowerCase();
+  canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+  const role = this.authService.getRole()?.toLowerCase() || '';
   const isAuthenticated = this.authService.isAuthenticated();
 
-  console.log('🔐 AdminGuard - Checking route:', state.url);
-  console.log('   -> Role:', role);
-  console.log('   -> Authenticated:', isAuthenticated);
-
-  if (isAuthenticated && role === 'admin') {
-    console.log('✅ Access granted to admin route:', state.url);
-    return true;
-  } else {
-    console.warn('🚫 Access denied. Redirecting...');
-    if (isAuthenticated) {
-      this.router.navigate(['/select-chama']);
-    } else {
-      this.router.navigate(['/login']);
-    }
+  if (!isAuthenticated) {
+    this.router.navigate(['/login']);
     return false;
   }
+
+  if (['admin', 'superadmin', 'super-admin', 'super_admin'].includes(role)) {
+    return true; // Just allow access, don't redirect
+  }
+
+  if (role === 'user') {
+    this.router.navigate(['/select-chama']);
+    return false;
+  }
+
+  this.router.navigate(['/login']);
+  return false;
 }
 }

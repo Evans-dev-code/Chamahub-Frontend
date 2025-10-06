@@ -11,17 +11,13 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class LoginComponent {
   loginForm: FormGroup;
-  errorMessage: string = '';
-  loginMessage: string = ''; // For success/error message display
-  loginSuccess: boolean = false; // True if login succeeded
-  showPassword: boolean = false; // Toggle password visibility
-  loading: boolean = false; // Show spinner during login
+  errorMessage = '';
+  loginMessage = '';
+  loginSuccess = false;
+  showPassword = false;
+  loading = false;
 
-  constructor(
-    private fb: FormBuilder,
-    private router: Router,
-    private authService: AuthService
-  ) {
+  constructor(private fb: FormBuilder, private router: Router, private authService: AuthService) {
     this.loginForm = this.fb.group({
       usernameOrEmail: ['', [Validators.required]],
       password: ['', [Validators.required, Validators.minLength(6)]]
@@ -29,58 +25,56 @@ export class LoginComponent {
   }
 
   onSubmit(): void {
-    if (this.loginForm.valid) {
-      this.loading = true; // Start loading
-      this.loginMessage = '';
-      this.errorMessage = '';
+    if (!this.loginForm.valid) return;
 
-      const loginData = {
-        identifier: this.loginForm.value.usernameOrEmail,
-        password: this.loginForm.value.password
-      };
+    this.loading = true;
+    this.errorMessage = '';
+    this.loginMessage = '';
 
-      console.log('🚀 Sending login data:', loginData);
+    const loginData = {
+      identifier: this.loginForm.value.usernameOrEmail,
+      password: this.loginForm.value.password
+    };
 
-      this.authService.login(loginData).subscribe({
-        next: (res) => {
-          console.log('🔁 Full login response:', res);
-          this.loading = false;
+    this.authService.login(loginData).subscribe({
+      next: (res) => {
+        this.loading = false;
+        const token = res.token;
+        const role = (res.role || 'user').toLowerCase();
 
-          const token = res.token || null;
-          const role = (res.role || 'user').toLowerCase();
-
-          if (token) {
-            this.authService.setAuthToken(token);
-            this.authService.setRole(role);
-
-            this.loginSuccess = true;
-            this.loginMessage = 'Login successful! Redirecting...';
-
-            setTimeout(() => {
-              if (role === 'admin') {
-                console.log('✅ Admin login success! Redirecting to Chama Management...');
-                this.router.navigate(['/chama-management']);
-              } else if (role === 'user') {
-                console.log('✅ User login success! Redirecting to Select Chama...');
-                this.router.navigate(['/select-chama']);
-              } else {
-                console.warn('⚠️ Unknown role:', role);
-                this.router.navigate(['/login']);
-              }
-            }, 1000); // Short delay to show message
-          } else {
-            console.error('❌ No token received in response!');
-            this.loginSuccess = false;
-            this.loginMessage = 'Login failed: no token received.';
-          }
-        },
-        error: (err: HttpErrorResponse) => {
-          console.error('❌ Login error:', err);
-          this.loading = false;
+        if (!token) {
           this.loginSuccess = false;
-          this.loginMessage = err.error?.message || 'Invalid credentials. Please try again.';
+          this.loginMessage = 'Login failed: no token received.';
+          return;
         }
-      });
-    }
+
+        this.authService.setAuthToken(token);
+        this.authService.setRole(role);
+
+        this.loginSuccess = true;
+        this.loginMessage = 'Login successful! Redirecting...';
+
+        // Redirect immediately based on role
+        switch (role) {
+          case 'super_admin':
+          case 'superadmin':
+          case 'admin':
+          case 'super-admin':
+          case 'super_admin':
+            this.router.navigate(['/chama-management']);
+            break;
+          case 'user':
+            this.router.navigate(['/select-chama']);
+            break;
+          default:
+            this.router.navigate(['/login']);
+        }
+      },
+      error: (err: HttpErrorResponse) => {
+        this.loading = false;
+        this.loginSuccess = false;
+        this.loginMessage = err.error?.message || 'Invalid credentials. Please try again.';
+      }
+    });
   }
 }

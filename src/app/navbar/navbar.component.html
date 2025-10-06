@@ -1,35 +1,62 @@
-<nav class="sidebar" *ngIf="isAdminUser">
-  <div class="sidebar-container">
-    <!-- Logo -->
-    <div class="sidebar-header">
+<mat-sidenav-container class="sidebar">
+  <mat-sidenav mode="side" opened class="sidebar-container">
+    <!-- Header -->
+    <mat-toolbar color="primary" class="sidebar-header">
       <a routerLink="/dashboard" class="sidebar-logo">ChamaHub💰</a>
-    </div>
+    </mat-toolbar>
 
     <!-- Active Chama Display -->
     <div class="active-chama" *ngIf="activeChamaId">
       <div class="chama-info-header">Active Chama</div>
       <div class="chama-name">{{ activeChamaName }}</div>
       <div class="chama-desc">{{ activeChamaDescription }}</div>
-      <button *ngIf="myChamas.length > 1" (click)="switchChama()" class="switch-chama-btn">
-        Switch Chama
+      <button mat-raised-button color="primary" *ngIf="myChamas.length > 1" (click)="switchChama()" class="switch-chama-btn">
+        <mat-icon>swap_horiz</mat-icon> Switch Chama
       </button>
     </div>
 
     <!-- No Chama Selected -->
     <div class="active-chama no-chama" *ngIf="!activeChamaId">
       <div class="chama-info-header">No Chama Selected</div>
-      <button (click)="switchChama()" class="switch-chama-btn">Select Chama</button>
+      <button mat-stroked-button color="accent" (click)="switchChama()" class="switch-chama-btn">
+        <mat-icon>group_add</mat-icon> Select Chama
+      </button>
     </div>
 
     <!-- Sidebar Links -->
-    <ul class="sidebar-links">
-      <li><a routerLink="/dashboard" routerLinkActive="active" class="nav-link">📊 Dashboard</a></li>
-      <li><a routerLink="/loan-approval" routerLinkActive="active" class="nav-link">✅ Loan Approval</a></li>
-      <li><a routerLink="/user-management" routerLinkActive="active" class="nav-link">👥 User Management</a></li>
-      <li><a routerLink="/admin-loan-payment" routerLinkActive="active" class="nav-link">💵 Loan Payment</a></li>
-      <li><a routerLink="/chama-rules" routerLinkActive="active" class="nav-link">📜 Chama Rules</a></li>
-      <li><a routerLink="/contributions-admin" routerLinkActive="active" class="nav-link">💰 Contributions</a></li>
-      <li><a (click)="logout()" class="nav-link logout-link">🚪 Logout</a></li>
-    </ul>
-  </div>
-</nav>
+    <mat-nav-list class="sidebar-links">
+      <a mat-list-item routerLink="/dashboard" routerLinkActive="active">
+        <mat-icon>dashboard</mat-icon> <span>Dashboard</span>
+      </a>
+
+      <a mat-list-item routerLink="/loan-approval" routerLinkActive="active">
+        <mat-icon>task_alt</mat-icon> <span>Loan Approval</span>
+      </a>
+
+      <a mat-list-item routerLink="/user-management" routerLinkActive="active">
+        <mat-icon>group</mat-icon> <span>User Management</span>
+      </a>
+
+      <a mat-list-item routerLink="/admin-loan-payment" routerLinkActive="active">
+        <mat-icon>payments</mat-icon> <span>Loan Payment</span>
+      </a>
+
+      <a mat-list-item routerLink="/chama-rules" routerLinkActive="active">
+        <mat-icon>gavel</mat-icon> <span>Chama Rules</span>
+      </a>
+
+      <a mat-list-item routerLink="/contributions-admin" routerLinkActive="active">
+        <mat-icon>savings</mat-icon> <span>Contributions</span>
+      </a>
+
+      <!-- 👑 Only Super Admin -->
+      <a *ngIf="isSuperAdminUser" mat-list-item routerLink="/invite-admin" routerLinkActive="active">
+        <mat-icon>person_add</mat-icon> <span>Invite Admin</span>
+      </a>
+
+      <a mat-list-item (click)="logout()" class="logout-link">
+        <mat-icon>logout</mat-icon> <span>Logout</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+</mat-sidenav-container>

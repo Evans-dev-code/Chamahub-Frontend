@@ -1,0 +1,25 @@
+<div class="invite-container">
+  <mat-card class="invite-card">
+    <mat-card-header>
+      <mat-card-title>Invite a New Admin</mat-card-title>
+      <mat-card-subtitle>Send an email invitation to another admin</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form (ngSubmit)="sendInvite()" class="invite-form">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Email address</mat-label>
+          <input matInput type="email" [(ngModel)]="email" name="email" required [disabled]="loading">
+        </mat-form-field>
+
+        <div class="button-container">
+          <button mat-raised-button color="primary" type="submit" [disabled]="loading">
+            <mat-icon *ngIf="!loading">send</mat-icon>
+            <mat-spinner *ngIf="loading" diameter="20"></mat-spinner>
+            <span *ngIf="!loading">Send Invitation</span>
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

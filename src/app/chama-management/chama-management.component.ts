@@ -15,12 +15,10 @@ export class ChamaManagementComponent implements OnInit {
   loading = false;
   error: string | null = null;
   creating = false;
-
-  showCreateForm: boolean = false;
-  showJoinForm: boolean = false;
-  joinCode: string = '';
-
-  isAdmin: boolean = false;
+  showCreateForm = false;
+  showJoinForm = false;
+  joinCode = '';
+  isAdmin = false;
 
   constructor(
     private fb: FormBuilder,
@@ -35,7 +33,9 @@ export class ChamaManagementComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.isAdmin = this.authService.isAdmin();
+    this.isAdmin = ['admin', 'superadmin', 'super-admin', 'super_admin'].includes(
+      this.authService.getRole()?.toLowerCase() || ''
+    );
     this.loadChamas();
   }
 
@@ -55,13 +55,12 @@ export class ChamaManagementComponent implements OnInit {
     this.loading = true;
     this.chamaService.getMyChamas().subscribe({
       next: (data: Chama[]) => {
-        this.chamas = data;
+        this.chamas = data || [];
         this.loading = false;
       },
-      error: (err: any) => {
+      error: () => {
         this.error = 'Failed to load chamas';
         this.loading = false;
-        console.error(err);
       }
     });
   }
@@ -77,12 +76,9 @@ export class ChamaManagementComponent implements OnInit {
         this.chamaForm.reset();
         this.creating = false;
         this.showCreateForm = false;
-
-        // Automatically set the new chama as active
         this.selectChama(newChama);
       },
-      error: (err: any) => {
-        console.error('Failed to create chama:', err);
+      error: () => {
         this.error = 'Failed to create chama';
         this.creating = false;
       }
@@ -101,56 +97,43 @@ export class ChamaManagementComponent implements OnInit {
         this.showJoinForm = false;
         this.joinCode = '';
         this.loading = false;
-        
-        // Automatically set the joined chama as active
         this.selectChama(joinedChama);
       },
-      error: (err: any) => {
+      error: () => {
         this.error = 'Failed to join chama. Check your join code.';
         this.loading = false;
-        console.error(err);
       }
     });
   }
 
-  // Fixed: Prevent event bubbling for button clicks inside chama card
   onGenerateCode(event: Event, chama: Chama): void {
-    event.stopPropagation(); // Prevent card click
-    
-    if (!chama || !chama.id) return;
+    event.stopPropagation();
+    if (!chama?.id) return;
+
     this.chamaService.generateJoinCode(chama.id).subscribe({
       next: (res: { joinCode: string }) => {
         chama.joinCode = res.joinCode;
       },
-      error: (err: any) => {
-        console.error('Failed to generate join code:', err);
-      }
+      error: () => {}
     });
   }
 
-  // Fixed: Prevent event bubbling for copy button
   copyCode(event: Event, code?: string): void {
-    event.stopPropagation(); // Prevent card click
-    
+    event.stopPropagation();
     if (!code) return;
+
     navigator.clipboard?.writeText(code).then(
       () => alert('Join code copied to clipboard'),
-      (err) => {
-        console.error('Copy failed', err);
-        alert('Failed to copy join code');
-      }
+      () => alert('Failed to copy join code')
     );
   }
 
-  // Fixed: Clean chama selection with navigation
   selectChama(chama: Chama): void {
-    console.log('Selecting chama:', chama.name);
-    
-    // Set active chama in localStorage
     localStorage.setItem('activeChamaId', chama.id.toString());
     localStorage.setItem('activeChamaName', chama.name);
-    
-    // Navigate to appropriate dashboard
+
+    window.dispatchEvent(new CustomEvent('activeChamaChanged', { detail: chama.id }));
+
     if (this.isAdmin) {
       this.router.navigate(['/dashboard']);
     } else {

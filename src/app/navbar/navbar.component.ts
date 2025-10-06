@@ -10,17 +10,19 @@ import { filter } from 'rxjs/operators';
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit, OnDestroy {
-  isAdminUser: boolean = false;
-  activeChamaName: string = '';
-  activeChamaDescription: string = '';
+  isAdminUser = false;
+  isSuperAdminUser = false;
+  activeChamaName = '';
+  activeChamaDescription = '';
   activeChamaId: string | null = null;
-  myChamas: any[] = []; // you can populate this from a ChamaService
-  private routerSubscription: Subscription = new Subscription();
+  myChamas: any[] = [];
+
+  private routerSubscription = new Subscription();
 
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
-    this.checkAdminStatus();
+    this.checkUserRole();
     this.loadActiveChamaInfo();
 
     this.routerSubscription = this.router.events
@@ -32,8 +34,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.routerSubscription.unsubscribe();
   }
 
-  private checkAdminStatus(): void {
-    this.isAdminUser = this.authService.isAdmin();
+  private checkUserRole(): void {
+    const role = this.authService.getRole()?.toLowerCase();
+    this.isAdminUser = role === 'admin' || role === 'super_admin';
+    this.isSuperAdminUser = role === 'super_admin';
   }
 
   private loadActiveChamaInfo(): void {
@@ -45,8 +49,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
   switchChama(): void {
     if (this.myChamas.length > 1) {
       this.router.navigate(['/chama-selection']);
-    } else {
-      console.log('Only one chama available — switch not needed.');
     }
   }
 

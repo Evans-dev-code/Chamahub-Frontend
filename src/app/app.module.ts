@@ -41,7 +41,13 @@ import { LoanService } from './services/loan.service';
 import { ChamaService } from './services/chama.service';
 import { ContributionService } from './services/contribution.service';
 import { AdminGuard } from './guards/admin.guard';
+import { AuthGuard } from './guards/auth.guard';
+import { SuperAdminGuard } from './guards/super-admin.guard';
 import { AuthInterceptor } from './auth/interceptor.service';
+import { ForgotPasswordComponent } from './auth/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './auth/reset-password/reset-password.component';
+import { InviteAdminComponent } from './auth/invite-admin/invite-admin.component';
+import { AcceptInviteComponent } from './auth/accept-invite/accept-invite.component';
 
 @NgModule({
   declarations: [
@@ -65,7 +71,11 @@ import { AuthInterceptor } from './auth/interceptor.service';
     UserContributionsComponent,
     ContributionsAdminComponent,
     NavbarComponent,
-    PaymentConfirmDialogComponent
+    PaymentConfirmDialogComponent,
+    ForgotPasswordComponent,
+    ResetPasswordComponent,
+    InviteAdminComponent,
+    AcceptInviteComponent
   ],
   imports: [
     BrowserModule,
@@ -83,6 +93,8 @@ import { AuthInterceptor } from './auth/interceptor.service';
     ChamaService,
     ContributionService,
     AdminGuard,
+    AuthGuard,
+    SuperAdminGuard,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   ],
   bootstrap: [AppComponent],

@@ -42,14 +42,27 @@
         <h3>💰 Total Contributions</h3>
         <p>{{ totalContributions | currency:'KES' }}</p>
       </div>
+
       <div class="stat-card">
         <h3>💵 Active Loans</h3>
         <p>{{ activeLoans }}</p>
       </div>
+
+      <!-- ✅ Next Due Date (Updated to match your TS) -->
       <div class="stat-card">
         <h3>📅 Next Due Date</h3>
-        <p>{{ nextDueDate | date:'mediumDate' }}</p>
+        <ng-container *ngIf="nextDueDate; else notYourTurn">
+          <p class="highlight-text">
+            🎉 You’re next for payout! <br />
+            <span class="highlight-date">{{ nextDueDate | date:'fullDate' }}</span>
+          </p>
+        </ng-container>
+
+        <ng-template #notYourTurn>
+          <p>No upcoming payout for you yet.</p>
+        </ng-template>
       </div>
+
       <div class="stat-card">
         <h3>📈 Group Balance</h3>
         <p>{{ chamaBalance | currency:'KES' }}</p>
@@ -76,43 +89,25 @@
     </section>
 
     <!-- Loan Calculator Modal -->
-    <div
-      class="modal-overlay"
-      [class.show]="isModalOpen"
-      (click)="closeModal()"
-    >
+    <div class="modal-overlay" [class.show]="isModalOpen" (click)="closeModal()">
       <div class="modal-content" (click)="$event.stopPropagation()">
         <h2>📊 Loan Calculator</h2>
         <div class="calculator-box">
           <label>Loan Amount (KES):</label>
-          <input
-            type="number"
-            [(ngModel)]="loanAmount"
-            placeholder="Enter amount"
-          />
+          <input type="number" [(ngModel)]="loanAmount" placeholder="Enter amount" />
 
           <label>Interest Rate (%):</label>
-          <input
-            type="number"
-            [(ngModel)]="interestRate"
-            placeholder="Enter rate"
-          />
+          <input type="number" [(ngModel)]="interestRate" placeholder="Enter rate" />
 
           <label>Loan Term (Months):</label>
-          <input
-            type="number"
-            [(ngModel)]="loanTerm"
-            placeholder="Enter term"
-          />
+          <input type="number" [(ngModel)]="loanTerm" placeholder="Enter term" />
 
-          <button class="calculate-btn" (click)="calculateLoan()">
-            Calculate
-          </button>
+          <button class="calculate-btn" (click)="calculateLoan()">Calculate</button>
 
           <div *ngIf="monthlyPayment !== null" class="result-box">
             <h3>
               Estimated Monthly Payment:
-              <span>KES {{ monthlyPayment | number : '1.2-2' }}</span>
+              <span>KES {{ monthlyPayment | number:'1.2-2' }}</span>
             </h3>
           </div>
 

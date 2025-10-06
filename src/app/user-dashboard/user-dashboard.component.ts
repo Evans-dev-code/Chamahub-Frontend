@@ -11,24 +11,24 @@ import { MemberPayoutDTO } from '../models/member-payout.dto';
   styleUrls: ['./user-dashboard.component.scss']
 })
 export class UserDashboardComponent implements OnInit {
-  // Loan calculator
+  // ===== Loan Calculator =====
   loanAmount: number = 0;
   interestRate: number = 0;
   loanTerm: number = 0;
   monthlyPayment: number | null = null;
   isModalOpen = false;
 
-  // Chama data
+  // ===== Chama Data =====
   chamaId: number | null = null;
   applications: LoanApplication[] = [];
 
-  // Stats
+  // ===== Stats =====
   totalContributions: number = 0;
   activeLoans: number = 0;
   nextDueDate: Date | null = null;
   chamaBalance: number = 0;
 
-  // Loading / error states
+  // ===== Loading & Error States =====
   loadingStats: boolean = false;
   statsError: string | null = null;
 
@@ -47,7 +47,7 @@ export class UserDashboardComponent implements OnInit {
     }
   }
 
-  // ===== Loan Calculator =====
+  // ===== Loan Calculator Logic =====
   calculateLoan() {
     if (this.loanAmount > 0 && this.interestRate > 0 && this.loanTerm > 0) {
       const monthlyRate = this.interestRate / 100 / 12;
@@ -98,31 +98,44 @@ export class UserDashboardComponent implements OnInit {
     this.loadingStats = true;
     this.statsError = null;
 
-    // Total contributions
-    this.contributionService.getTotalContributions(this.chamaId).subscribe({
-      next: (total) => (this.totalContributions = total),
-      error: () => (this.statsError = 'Failed to load contributions')
+    const userId = this.authService.getUserId(); // ✅ Get current logged-in user's ID
+
+    // ✅ 1. User’s total contributions
+    this.contributionService.getContributionsByMember(this.chamaId, undefined, userId).subscribe({
+      next: (contributions) => {
+        this.totalContributions = contributions.reduce((sum, c) => sum + c.amount, 0);
+      },
+      error: () => (this.statsError = 'Failed to load user contributions')
     });
 
-    // Active loans
+    // ✅ 2. Active loans (user-based)
     this.loanService.getUserApplications(this.chamaId).subscribe({
       next: (apps) => (this.activeLoans = apps.filter(a => a.status === 'APPROVED').length),
       error: () => (this.statsError = 'Failed to load loans')
     });
 
-    // Next payout
-    this.contributionService.getNextPayout(this.chamaId).subscribe({
-      next: (payout: MemberPayoutDTO) => {
-        this.nextDueDate = payout?.payoutDate ? new Date(payout.payoutDate) : null;
-        this.loadingStats = false;
-      },
-      error: () => {
-        this.statsError = 'Failed to load payout info';
-        this.loadingStats = false;
-      }
-    });
+   // ✅ 3. Next payout (from chama data)
+this.contributionService.getNextPayout(this.chamaId).subscribe({
+  next: (payout: MemberPayoutDTO) => {
+    const userId = this.authService.getUserId();
 
-    // Balance
+    // Check if the current user is the one who will receive the next payout
+    if (payout && payout.nextPayoutMemberId === userId) {
+      this.nextDueDate = payout.payoutDate ? new Date(payout.payoutDate) : null;
+    } else {
+      this.nextDueDate = null;
+    }
+
+    this.loadingStats = false;
+  },
+  error: () => {
+    this.statsError = 'Failed to load payout info';
+    this.loadingStats = false;
+  }
+});
+
+
+    // ✅ 4. Group total balance (all members combined)
     this.contributionService.getContributionsByChama(this.chamaId).subscribe({
       next: (contributions) => {
         this.chamaBalance = contributions.reduce((sum, c) => sum + c.amount, 0);

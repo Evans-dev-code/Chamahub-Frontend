@@ -1,0 +1,42 @@
+<div class="accept-container">
+  <mat-card class="accept-card">
+    <mat-card-header>
+      <mat-card-title>Create Your Admin Account</mat-card-title>
+      <mat-card-subtitle>Complete the form to activate your admin profile</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content *ngIf="token; else invalidToken">
+      <form (ngSubmit)="acceptInvite()" class="accept-form">
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Full Name</mat-label>
+          <input matInput type="text" [(ngModel)]="fullName" name="fullName" required [disabled]="loading">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Username</mat-label>
+          <input matInput type="text" [(ngModel)]="username" name="username" required [disabled]="loading">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Password</mat-label>
+          <input matInput type="password" [(ngModel)]="password" name="password" required [disabled]="loading">
+        </mat-form-field>
+
+        <div class="button-container">
+          <button mat-raised-button color="primary" type="submit" [disabled]="loading">
+            <mat-icon *ngIf="!loading">person_add</mat-icon>
+            <mat-spinner *ngIf="loading" diameter="20"></mat-spinner>
+            <span *ngIf="!loading">Create Account</span>
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+
+    <ng-template #invalidToken>
+      <div class="error-msg">
+        ❌ Invalid or missing invitation token.
+      </div>
+    </ng-template>
+  </mat-card>
+</div>

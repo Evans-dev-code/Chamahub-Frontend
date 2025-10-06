@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 export interface LoginRequest {
-  identifier: string;  // can be email or username
+  identifier: string;
   password: string;
 }
 
@@ -11,6 +12,8 @@ export interface LoginResponse {
   token: string;
   role: string;
   userId: number;
+  activeChamaId?: number; // optional
+  activeChamaName?: string; // optional
 }
 
 @Injectable({
@@ -22,6 +25,8 @@ export class AuthService {
   private loginUrl = `${this.baseUrl}/login`;
   private checkUsernameUrl = `${this.baseUrl}/check-username`;
   private checkEmailUrl = `${this.baseUrl}/check-email`;
+  private inviteUrl = 'http://localhost:8080/api/admin-invitations/invite';
+  private acceptInviteUrl = 'http://localhost:8080/api/admin-invitations/accept';
 
   private tokenKey = 'authToken';
   private roleKey = 'userRole';
@@ -31,9 +36,6 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  // ==========================
-  // Auth Methods
-  // ==========================
   signup(userPayload: any): Observable<any> {
     return this.http.post(this.signupUrl, userPayload);
   }
@@ -43,7 +45,19 @@ export class AuthService {
       tap((response: LoginResponse) => {
         this.setAuthToken(response.token);
         this.setRole(response.role);
-        localStorage.setItem(this.userIdKey, response.userId.toString());
+
+        if (response.userId !== undefined && response.userId !== null) {
+          localStorage.setItem(this.userIdKey, response.userId.toString());
+        }
+
+        // Store active chama if available
+        if (response.activeChamaId !== undefined && response.activeChamaId !== null) {
+          localStorage.setItem(this.activeChamaKey, response.activeChamaId.toString());
+        }
+
+        if (response.activeChamaName) {
+          localStorage.setItem(this.activeChamaNameKey, response.activeChamaName);
+        }
       })
     );
   }
@@ -61,7 +75,12 @@ export class AuthService {
   }
 
   isAdmin(): boolean {
-    return this.getRole() === 'admin';
+    const role = this.getRole();
+    return role === 'admin' || role === 'super_admin';
+  }
+
+  isSuperAdmin(): boolean {
+    return this.getRole() === 'super_admin';
   }
 
   isUser(): boolean {
@@ -71,6 +90,11 @@ export class AuthService {
   getCurrentUserId(): number | null {
     const userId = localStorage.getItem(this.userIdKey);
     return userId ? parseInt(userId, 10) : null;
+  }
+
+  getUserId(): number {
+    const stored = localStorage.getItem(this.userIdKey);
+    return stored ? parseInt(stored, 10) : 0;
   }
 
   setAuthToken(token: string): void {
@@ -89,14 +113,42 @@ export class AuthService {
     return localStorage.getItem(this.roleKey);
   }
 
-  // ==========================
-  // Real-time availability checks
-  // ==========================
+  // ✅ New method to check if admin has a chama
+  hasChama(): boolean {
+    const chamaId = localStorage.getItem(this.activeChamaKey);
+    return !!chamaId;
+  }
+
   checkUsernameAvailability(username: string): Observable<{ available: boolean }> {
     return this.http.get<{ available: boolean }>(`${this.checkUsernameUrl}/${username}`);
   }
 
   checkEmailAvailability(email: string): Observable<{ available: boolean }> {
     return this.http.get<{ available: boolean }>(`${this.checkEmailUrl}/${email}`);
+  }
+
+  forgotPassword(email: string): Observable<string> {
+    const url = `${this.baseUrl}/forgot-password`;
+    return this.http.post(url, { email }, { responseType: 'text' as const });
+  }
+
+  resetPassword(token: string, newPassword: string): Observable<string> {
+    const url = `${this.baseUrl}/reset-password`;
+    return this.http.post(url, { token, newPassword }, { responseType: 'text' as const });
+  }
+
+  inviteAdmin(email: string): Observable<{ message: string }> {
+    const token = this.getAuthToken();
+    const headers = { Authorization: `Bearer ${token}` };
+    return this.http.post<{ message: string }>(this.inviteUrl, { email }, { headers });
+  }
+
+  acceptAdminInvitation(token: string, fullName: string, username: string, password: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(this.acceptInviteUrl, {
+      token,
+      fullName,
+      username,
+      password
+    });
   }
 }
